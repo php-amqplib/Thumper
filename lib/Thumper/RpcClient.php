@@ -14,11 +14,16 @@ class RpcClient extends BaseAmqp
   
   public function addRequest($msgBody, $server, $requestId = null, $routingKey = '')
   {
+    if(empty($requestId))
+    {
+      throw new InvalidArgumentException('You must provide a $requestId');
+    }
+    
     $msg = new AMQPMessage($msgBody, array('content_type' => 'text/plain', 
                                            'reply_to' => $this->queueName,
                                            'correlation_id' => $requestId));
     
-    $this->ch->basic_publish($msg, $server, $routingKey);
+    $this->ch->basic_publish($msg, $server . '-exchange', $routingKey);
     
     $this->requests++;
   }

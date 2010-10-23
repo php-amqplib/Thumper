@@ -12,7 +12,7 @@ $myConsumer = function($msg)
 $consumer = new Consumer(HOST, PORT, USER, PASS, VHOST);
 $consumer->setExchangeOptions(array('name' => 'hello-exchange', 'type' => 'direct'));
 $consumer->setQueueOptions(array('name' => 'hello-queue'));
-$consumer->setCallback($myConsumer);
-$consumer->consume(5);
+$consumer->setCallback($myConsumer); //myConsumer could be any valid PHP callback
+$consumer->consume(5); //5 is the number of messages to consumes
 
 ?>

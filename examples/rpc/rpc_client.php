@@ -6,8 +6,8 @@ require_once('../../lib/php-amqplib/amqp.inc');
 
 $client = new RpcClient(HOST, PORT, USER, PASS, VHOST);
 $client->initClient();
-$client->addRequest($argv[1], 'charcount-exchange', 'charcount');
-echo "Waiting for replies…";
+$client->addRequest($argv[1], 'charcount', 'charcount'); //the third parameter is the request identifier
+echo "Waiting for replies…\n";
 $replies = $client->getReplies();
 
 var_dump($replies);
