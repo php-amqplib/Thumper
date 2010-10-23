@@ -4,6 +4,13 @@ Thumper is a PHP library that aims to abstract several messaging patterns that c
 
 Inside the _examples_ folder you can see how to implement RPC, parallel processing, simple queue servers and pub/sub.
 
+INSTALLATION
+
+		$ git clone http://github.com/videlalvaro/Thumper.git
+		$ git clone http://github.com/tnc/php-amqplib.git lib/php-amqplib
+		
+As you see it requires the php-amqplib
+
 # About the Examples #
 
 Each example has a README.md file that shows how to execute it. All the examples expect that RabbitMQ is running. They have been tested using RabbitMQ 2.1.1
