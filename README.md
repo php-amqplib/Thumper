@@ -29,7 +29,7 @@ This example is based on the RPC one. In this case it shows how to achieve paral
 
 ## Topic ##
 
-In this case we can see how to achieve publish/subscribe with RabbitMQ. The example is about logging. We can log with several levels and subjects and then have consumers that listen to different log levels and act accordingly.
+In this case we can see how to achieve publish/subscribe with RabbitMQ. The example is about logging. We can log with several levels and subjects and then have consumers that listen to different log levels act accordingly.
 
 # Disclaimer #
 
