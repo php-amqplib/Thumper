@@ -31,6 +31,10 @@ This example is based on the RPC one. In this case it shows how to achieve paral
 
 In this case we can see how to achieve publish/subscribe with RabbitMQ. The example is about logging. We can log with several levels and subjects and then have consumers that listen to different log levels act accordingly.
 
+## Anonymous Consumers ##
+
+Also inside the _topic_ folder there's an anonymous consumer example. The idea here is for those situations when you need to hook up a queue to some exchange to "spy" what's going on, but when you quit your program you want that the queue is automatically deleted. We can achieve this using an unnamed queue.
+
 # Disclaimer #
 
 This code is experimental. The idea is to show how easy is to implement such patterns with RabbitMQ and AMQP.
