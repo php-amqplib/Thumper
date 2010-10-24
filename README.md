@@ -7,7 +7,7 @@ Inside the _examples_ folder you can see how to implement RPC, parallel processi
 INSTALLATION
 
 		$ git clone http://github.com/videlalvaro/Thumper.git
-		$ git clone http://github.com/tnc/php-amqplib.git lib/php-amqplib
+		$ git clone http://github.com/tnc/php-amqplib.git Thumper/lib/php-amqplib
 		
 As you see it requires the php-amqplib
 
