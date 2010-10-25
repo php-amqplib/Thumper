@@ -15,6 +15,25 @@ As you see it requires the php-amqplib
 
 Each example has a README.md file that shows how to execute it. All the examples expect that RabbitMQ is running. They have been tested using RabbitMQ 2.1.1
 
+For example, to publish message to RabbitMQ is as simple as this:
+
+		$producer = new Producer(HOST, PORT, USER, PASS, VHOST);
+		$producer->setExchangeOptions(array('name' => 'hello-exchange', 'type' => 'direct'));
+		$producer->publish($argv[1]);
+
+And then to consume them on the other side of the wire:
+
+		$myConsumer = function($msg)
+		{
+		  echo $msg, "\n";
+		};
+
+		$consumer = new Consumer(HOST, PORT, USER, PASS, VHOST);
+		$consumer->setExchangeOptions(array('name' => 'hello-exchange', 'type' => 'direct'));
+		$consumer->setQueueOptions(array('name' => 'hello-queue'));
+		$consumer->setCallback($myConsumer); //myConsumer could be any valid PHP callback
+		$consumer->consume(5); //5 is the number of messages to consume.
+
 ## Queue Server ##
 
 This example illustrates how to create a producer that will publish jobs into a queue. Those jobs will be processed later by a consumer –or several of them–.
