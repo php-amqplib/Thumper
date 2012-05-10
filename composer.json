@@ -1,0 +1,20 @@
+{
+    "name": "videlalvaro/Thumper",
+    "type": "library",
+    "description": "AMQP Tools",
+    "keywords": ["library", "AMQP", "RabbitMQ", "PHPAMQPLib", "Thumper"],
+    "homepage": "git://github.com/videlalvaro/Thumper.git",
+    "autoload": {
+        "psr-0": {"Thumper": "lib"}
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git://github.com/videlalvaro/php-amqplib.git"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "videlalvaro/php-amqplib" : "master-dev"
+    }
+}
