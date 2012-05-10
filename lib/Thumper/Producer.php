@@ -2,6 +2,8 @@
 
 require_once(__DIR__ . '/BaseAmqp.php');
 
+use PhpAmqpLib\Message\AMQPMessage;
+
 class Producer extends BaseAmqp
 {
   public function publish($msgBody, $routingKey = '')

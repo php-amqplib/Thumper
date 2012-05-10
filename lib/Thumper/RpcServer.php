@@ -2,6 +2,8 @@
 
 require_once(__DIR__ . '/BaseConsumer.php');
 
+use PhpAmqpLib\Message\AMQPMessage;
+
 class RpcServer extends BaseConsumer
 {
   public function initServer($name)
@@ -9,17 +11,17 @@ class RpcServer extends BaseConsumer
     $this->setExchangeOptions(array('name' => $name . '-exchange', 'type' => 'direct'));
     $this->setQueueOptions(array('name' => $name . '-queue'));
   }
-  
+
   public function start()
   {
     $this->setUpConsumer();
-    
+
     while(count($this->ch->callbacks))
     {
       $this->ch->wait();
     }
   }
-  
+
   public function processMessage($msg)
   {
     try
@@ -33,7 +35,7 @@ class RpcServer extends BaseConsumer
       $this->sendReply('error: ' .  $e->getMessage(), $msg->get('reply_to'));
     }
   }
-  
+
   protected function sendReply($result, $client, $correlationId)
   {
     $reply = new AMQPMessage($result, array('content_type' => 'text/plain', 'correlation_id' => $correlationId));
