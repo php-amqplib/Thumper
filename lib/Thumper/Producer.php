@@ -8,12 +8,6 @@ class Producer extends BaseAmqp
 {
     protected $exchangeReady = false;
 
-
-    public function __construct($host, $port, $user, $pass, $vhost)
-    {
-        parent::__construct($host, $port, $user, $pass, $vhost);
-    }
-
     public function publish($msgBody, $routingKey = '')
     {
         if (!$this->exchangeReady) {
