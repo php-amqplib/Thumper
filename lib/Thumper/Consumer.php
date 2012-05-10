@@ -1,6 +1,8 @@
 <?php
-
+namespace Thumper;
 require_once(__DIR__ . '/BaseConsumer.php');
+use Thumper\BaseConsumer,
+    Exception;
 
 class Consumer extends BaseConsumer
 {

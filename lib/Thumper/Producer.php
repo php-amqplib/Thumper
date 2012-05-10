@@ -1,8 +1,8 @@
 <?php
-
+namespace Thumper;
 require_once(__DIR__ . '/BaseAmqp.php');
-
-use PhpAmqpLib\Message\AMQPMessage;
+use PhpAmqpLib\Message\AMQPMessage,
+    Thumper\BaseAmqp;
 
 class Producer extends BaseAmqp
 {
