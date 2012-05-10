@@ -1,0 +1,1 @@
+- Add non persistent queues for consumers, and a non persistent message publisher for fast message delivery.
