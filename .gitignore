@@ -1,1 +1,2 @@
-lib/php-amqplib
+vendor
+composer.lock

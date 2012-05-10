@@ -6,7 +6,9 @@ Inside the _examples_ folder you can see how to implement RPC, parallel processi
 
 INSTALLATION
 
-Clone this project and then just run `make` to fetch the dependencies.
+@see http://getcomposer.org for composer details.
+
+Clone this project and then just run `composer update` to fetch the dependencies.
 
 This project requires the php-amqplib library.
 
