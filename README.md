@@ -6,10 +6,9 @@ Inside the _examples_ folder you can see how to implement RPC, parallel processi
 
 INSTALLATION
 
-		$ git clone git://github.com/videlalvaro/Thumper.git
-		$ git clone git://github.com/videlalvaro/php-amqplib.git Thumper/lib/php-amqplib
+Clone this project and then just run `make` to fetch the dependencies.
 
-As you see it requires the php-amqplib library.
+This project requires the php-amqplib library.
 
 # About the Examples #
 
