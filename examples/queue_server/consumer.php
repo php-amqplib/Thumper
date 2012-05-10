@@ -1,8 +1,8 @@
 <?php
 
+require_once('../../config/autoload.php');
 require_once('../../config/config.php');
 require_once('../../lib/Thumper/Consumer.php');
-require_once('../../lib/php-amqplib/amqp.inc');
 
 $myConsumer = function($msg)
 {
