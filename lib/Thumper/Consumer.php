@@ -4,7 +4,7 @@ require_once(__DIR__ . '/BaseConsumer.php');
 
 class Consumer extends BaseConsumer
 {
-  var $consumed = 0;
+  public $consumed = 0;
 
   public function consume($msgAmount)
   {
