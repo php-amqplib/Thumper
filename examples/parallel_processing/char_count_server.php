@@ -10,7 +10,7 @@ $charCount = function($word)
   return strlen($word);
 };
 
-$server = new RpcServer(HOST, PORT, USER, PASS, VHOST);
+$server = new Thumper\RpcServer(HOST, PORT, USER, PASS, VHOST);
 $server->initServer('charcount');
 $server->setCallback($charCount);
 $server->start();
