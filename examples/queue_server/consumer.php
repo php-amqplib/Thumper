@@ -1,4 +1,31 @@
 <?php
+/**
+ * The MIT License
+ *
+ * Copyright (c) 2010 Alvaro Videla
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *
+ *
+ * @category   Thumper
+ * @package    Thumper
+ */
 
 require_once(dirname(dirname(__DIR__)) . '/config/config.php');
 
@@ -7,10 +34,9 @@ $myConsumer = function($msg)
   echo $msg, "\n";
 };
 
-$consumer = new Consumer(HOST, PORT, USER, PASS, VHOST);
+$consumer = new Thumper\Consumer(HOST, PORT, USER, PASS, VHOST);
 $consumer->setExchangeOptions(array('name' => 'hello-exchange', 'type' => 'direct'));
 $consumer->setQueueOptions(array('name' => 'hello-queue'));
 $consumer->setCallback($myConsumer); //myConsumer could be any valid PHP callback
 $consumer->consume(5); //5 is the number of messages to consume
 
-?>
