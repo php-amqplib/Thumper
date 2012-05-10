@@ -4,20 +4,20 @@ require_once(__DIR__ . '/BaseConsumer.php');
 
 class Consumer extends BaseConsumer
 {
-  var $consumed = 0;
+  public $consumed = 0;
 
   public function consume($msgAmount)
   {
     $this->target = $msgAmount;
-    
+
     $this->setUpConsumer();
-    
+
     while(count($this->ch->callbacks))
     {
       $this->ch->wait();
     }
   }
-  
+
   public function processMessage($msg)
   {
     try
@@ -32,7 +32,7 @@ class Consumer extends BaseConsumer
       throw $e;
     }
   }
-  
+
   protected function maybeStopConsumer($msg)
   {
     if($this->consumed == $this->target)
