@@ -1,0 +1,20 @@
+{
+    "name": "zircote/Thumper",
+    "type": "library",
+    "description": "AMQP Tools",
+    "keywords": ["library", "OAuth2"],
+    "homepage": "https://github.com/zircote/Thumper",
+    "autoload": {
+        "psr-0": {"Thumper": "lib"}
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/videlalvaro/php-amqplib"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "videlalvaro/php-amqplib" : "master-dev"
+    }
+}

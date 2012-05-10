@@ -1,8 +1,6 @@
 <?php
 
-require_once(__DIR__ . '/../../config/autoload.php');
-require_once(__DIR__ . '/../../config/config.php');
-require_once(__DIR__ . '/../../lib/Thumper/RpcServer.php');
+require_once(dirname(dirname(__DIR__)) . '/config/config.php');
 
 $charCount = function($word)
 {
@@ -10,9 +8,8 @@ $charCount = function($word)
   return strlen($word);
 };
 
-$server = new RpcServer(HOST, PORT, USER, PASS, VHOST);
+$server = new Thumper\RpcServer(HOST, PORT, USER, PASS, VHOST);
 $server->initServer('charcount');
 $server->setCallback($charCount);
 $server->start();
 
-?>

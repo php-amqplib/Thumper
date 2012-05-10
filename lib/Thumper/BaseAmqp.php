@@ -1,6 +1,9 @@
 <?php
+namespace Thumper;
 
-use PhpAmqpLib\Connection\AMQPConnection;
+use PhpAmqpLib\Connection\AMQPConnection,
+    Thumper\BaseAmqp,
+    InvalidArgumentException;
 
 class BaseAmqp
 {
@@ -89,5 +92,3 @@ class BaseAmqp
     return "PHPPROCESS_".getmypid();
   }
 }
-
-?>

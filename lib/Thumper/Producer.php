@@ -1,6 +1,8 @@
 <?php
+namespace Thumper;
 
-require_once(__DIR__ . '/BaseAmqp.php');
+use Thumper\BaseAmqps,
+    PhpAmqpLib\Message\AMQPMessage;
 
 use PhpAmqpLib\Message\AMQPMessage;
 

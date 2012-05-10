@@ -1,8 +1,9 @@
 <?php
+namespace Thumper;
 
-require_once(__DIR__ . '/BaseConsumer.php');
-
-use PhpAmqpLib\Message\AMQPMessage;
+use PhpAmqpLib\Message\AMQPMessage,
+    Thumper\BaseConsumer,
+    Exception;
 
 class RpcServer extends BaseConsumer
 {
