@@ -11,7 +11,7 @@ $randomInt = function($data)
   return rand($data['min'], $data['max']);
 };
 
-$server = new RpcServer(HOST, PORT, USER, PASS, VHOST);
+$server = new Thumper\RpcServer(HOST, PORT, USER, PASS, VHOST);
 $server->initServer('random-int');
 $server->setCallback($randomInt);
 $server->start();

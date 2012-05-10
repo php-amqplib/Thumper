@@ -1,6 +1,7 @@
 <?php
-
-use PhpAmqpLib\Connection\AMQPConnection;
+namespace Thumper;
+use PhpAmqpLib\Connection\AMQPConnection,
+    InvalidArgumentException;
 
 class BaseAmqp
 {
