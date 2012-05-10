@@ -1,8 +1,8 @@
 <?php
 
-require_once('../../config/autoload.php');
-require_once('../../config/config.php');
-require_once('../../lib/Thumper/RpcClient.php');
+require_once(__DIR__ . '/../../config/autoload.php');
+require_once(__DIR__ . '/../../config/config.php');
+require_once(__DIR__ . '/../../lib/Thumper/RpcClient.php');
 
 $client = new RpcClient(HOST, PORT, USER, PASS, VHOST);
 $client->initClient();

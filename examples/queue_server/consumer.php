@@ -1,8 +1,8 @@
 <?php
 
-require_once('../../config/autoload.php');
-require_once('../../config/config.php');
-require_once('../../lib/Thumper/Consumer.php');
+require_once(__DIR__ . '/../../config/autoload.php');
+require_once(__DIR__ . '/../../config/config.php');
+require_once(__DIR__ . '/../../lib/Thumper/Consumer.php');
 
 $myConsumer = function($msg)
 {

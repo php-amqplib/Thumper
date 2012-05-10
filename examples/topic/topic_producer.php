@@ -1,8 +1,8 @@
 <?php
 
-require_once('../../config/autoload.php');
-require_once('../../config/config.php');
-require_once('../../lib/Thumper/Producer.php');
+require_once(__DIR__ . '/../../config/autoload.php');
+require_once(__DIR__ . '/../../config/config.php');
+require_once(__DIR__ . '/../../lib/Thumper/Producer.php');
 
 $producer = new Producer(HOST, PORT, USER, PASS, VHOST);
 $producer->setExchangeOptions(array('name' => 'logs-exchange', 'type' => 'topic'));
