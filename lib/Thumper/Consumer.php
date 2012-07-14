@@ -27,8 +27,8 @@
  * @package    Thumper
  */
 namespace Thumper;
-use Thumper\BaseConsumer,
-    Exception;
+use Thumper\BaseConsumer;
+use Exception;
 /**
  *
  *
