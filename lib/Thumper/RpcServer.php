@@ -27,9 +27,9 @@
  * @package    Thumper
  */
 namespace Thumper;
-use PhpAmqpLib\Message\AMQPMessage,
-    Thumper\BaseConsumer,
-    Exception;
+use PhpAmqpLib\Message\AMQPMessage;
+use Thumper\BaseConsumer;
+use Exception;
 /**
  *
  *

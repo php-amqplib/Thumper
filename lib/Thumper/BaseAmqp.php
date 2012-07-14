@@ -27,9 +27,8 @@
  * @package    Thumper
  */
 namespace Thumper;
-use PhpAmqpLib\Connection\AMQPConnection,
-    Thumper\BaseAmqp,
-    InvalidArgumentException;
+use PhpAmqpLib\Connection\AMQPConnection;
+use InvalidArgumentException;
 /**
  *
  *
