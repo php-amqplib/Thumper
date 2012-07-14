@@ -23,16 +23,24 @@
  * SOFTWARE.
  *
  *
- * @category   Thumper
- * @package    Thumper
+ * @package     Thumper
+ * @category    Thumper
+ * @subcategory Examples
  */
 
 require_once(dirname(dirname(__DIR__)) . '/config/config.php');
 
 $client = new Thumper\RpcClient(HOST, PORT, USER, PASS, VHOST);
 $client->initClient();
-$client->addRequest($argv[1], 'charcount', 'charcount'); //the third parameter is the request identifier
-echo "Waiting for replies…\n";
+/*
+ * the third parameter is the request identifier
+ */
+$client->addRequest(
+    $argv[ 1 ], 'charcount', 'charcount'
+);
+
+echo 'Waiting for replies…', PHP_EOL;
+
 $replies = $client->getReplies();
 
 var_dump($replies);

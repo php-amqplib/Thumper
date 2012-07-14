@@ -30,48 +30,72 @@ namespace Thumper;
 use PhpAmqpLib\Message\AMQPMessage;
 use Thumper\BaseConsumer;
 use Exception;
+
 /**
- *
- *
- *
  * @category   Thumper
  * @package    Thumper
  */
 class RpcServer extends BaseConsumer
 {
-  public function initServer($name)
-  {
-    $this->setExchangeOptions(array('name' => $name . '-exchange', 'type' => 'direct'));
-    $this->setQueueOptions(array('name' => $name . '-queue'));
-  }
 
-  public function start()
-  {
-    $this->setUpConsumer();
-
-    while(count($this->ch->callbacks))
+    /**
+     * @param $name
+     */
+    public function initServer($name)
     {
-      $this->ch->wait();
+        $this->setExchangeOptions(
+            array( 'name' => $name . '-exchange', 'type' => 'direct' )
+        );
+        $this->setQueueOptions(array( 'name' => $name . '-queue' ));
     }
-  }
 
-  public function processMessage($msg)
-  {
-    try
+    /**
+     *
+     */
+    public function start()
     {
-      $msg->delivery_info['channel']->basic_ack($msg->delivery_info['delivery_tag']);
-      $result = call_user_func($this->callback, $msg->body);
-      $this->sendReply($result, $msg->get('reply_to'), $msg->get('correlation_id'));
-    }
-    catch (Exception $e)
-    {
-      $this->sendReply('error: ' .  $e->getMessage(), $msg->get('reply_to'));
-    }
-  }
+        $this->setUpConsumer();
 
-  protected function sendReply($result, $client, $correlationId)
-  {
-    $reply = new AMQPMessage($result, array('content_type' => 'text/plain', 'correlation_id' => $correlationId));
-    $this->ch->basic_publish($reply, '', $client);
-  }
+        while (count($this->ch->callbacks)) {
+            $this->ch->wait();
+        }
+    }
+
+    /**
+     * @param AMQPMessage $msg
+     */
+    public function processMessage(AMQPMessage $msg)
+    {
+        try {
+            $msg->delivery_info[ 'channel' ]->basic_ack(
+                $msg->delivery_info[ 'delivery_tag' ]
+            );
+            $result = call_user_func($this->callback, $msg->body);
+            $this->sendReply(
+                $result, $msg->get('reply_to'), $msg->get('correlation_id')
+            );
+        }
+        catch (Exception $e) {
+            $this->sendReply(
+                'error: ' . $e->getMessage(), $msg->get('reply_to'),
+                $msg->get('correlation_id')
+            );
+        }
+    }
+
+    /**
+     * @param $result
+     * @param $client
+     * @param $correlationId
+     */
+    protected function sendReply($result, $client, $correlationId)
+    {
+        $reply = new AMQPMessage(
+            $result, array(
+                'content_type' => 'text/plain',
+                'correlation_id' => $correlationId
+            )
+        );
+        $this->ch->basic_publish($reply, '', $client);
+    }
 }

@@ -23,18 +23,21 @@
  * SOFTWARE.
  *
  *
- * @category   Thumper
- * @package    Thumper
+ * @package     Thumper
+ * @category    Thumper
+ * @subcategory Examples
  */
 
 require_once(dirname(dirname(__DIR__)) . '/config/config.php');
 
 $charCount = function($word)
 {
-  sleep(2);
-  return strlen($word);
+    sleep(2);
+    return strlen($word);
 };
-
+/*
+ * Begin Processing requests
+ */
 $server = new Thumper\RpcServer(HOST, PORT, USER, PASS, VHOST);
 $server->initServer('charcount');
 $server->setCallback($charCount);

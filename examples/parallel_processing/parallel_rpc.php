@@ -23,8 +23,9 @@
  * SOFTWARE.
  *
  *
- * @category   Thumper
- * @package    Thumper
+ * @package     Thumper
+ * @category    Thumper
+ * @subcategory Examples
  */
 require_once(dirname(dirname(__DIR__)) . '/config/config.php');
 
@@ -32,12 +33,21 @@ $start = time();
 
 $client = new Thumper\RpcClient(HOST, PORT, USER, PASS, VHOST);
 $client->initClient();
-$client->addRequest($argv[1], 'charcount', 'charcount'); //charcount is the request identifier
-$client->addRequest(serialize(array('min' => 0, 'max' => (int) $argv[2])), 'random-int', 'random-int'); //random-int is the request identifier
-echo "Waiting for replies…\n";
+
+$client->addRequest(
+    $argv[ 1 ], 'charcount', 'charcount'
+); //charcount is the request identifier
+
+$client->addRequest(
+    serialize(array( 'min' => 0, 'max' => (int)$argv[ 2 ] )), 'random-int',
+    'random-int'
+); //random-int is the request identifier
+
+echo 'Waiting for replies…', PHP_EOL;
+
 $replies = $client->getReplies();
 
 var_dump($replies);
 
-echo "Total time: ", time() - $start, "\n";
+echo "Total time: ", time() - $start, PHP_EOL;
 

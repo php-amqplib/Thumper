@@ -28,7 +28,9 @@
  */
 namespace Thumper;
 use Thumper\BaseConsumer;
+use PhpAmqpLib\Message\AMQPMessage;
 use Exception;
+
 /**
  *
  *
@@ -38,40 +40,55 @@ use Exception;
  */
 class Consumer extends BaseConsumer
 {
-  public $consumed = 0;
 
-  public function consume($msgAmount)
-  {
-    $this->target = $msgAmount;
+    /**
+     * @var int
+     */
+    public $consumed = 0;
 
-    $this->setUpConsumer();
-
-    while(count($this->ch->callbacks))
+    /**
+     * @param int $msgAmount
+     */
+    public function consume($msgAmount)
     {
-      $this->ch->wait();
-    }
-  }
+        $this->target = $msgAmount;
 
-  public function processMessage($msg)
-  {
-    try
-    {
-      call_user_func($this->callback, $msg->body);
-      $msg->delivery_info['channel']->basic_ack($msg->delivery_info['delivery_tag']);
-      $this->consumed++;
-      $this->maybeStopConsumer($msg);
-    }
-    catch (Exception $e)
-    {
-      throw $e;
-    }
-  }
+        $this->setUpConsumer();
 
-  protected function maybeStopConsumer($msg)
-  {
-    if($this->consumed == $this->target)
-    {
-      $msg->delivery_info['channel']->basic_cancel($msg->delivery_info['consumer_tag']);
+        while (count($this->ch->callbacks)) {
+            $this->ch->wait();
+        }
     }
-  }
+
+    /**
+     * @param $msg
+     *
+     * @throws \Exception
+     */
+    public function processMessage($msg)
+    {
+        try {
+            call_user_func($this->callback, $msg->body);
+            $msg->delivery_info[ 'channel' ]->basic_ack(
+                $msg->delivery_info[ 'delivery_tag' ]
+            );
+            $this->consumed++;
+            $this->maybeStopConsumer($msg);
+        }
+        catch (Exception $e) {
+            throw $e;
+        }
+    }
+
+    /**
+     * @param AMQPMessage $msg
+     */
+    protected function maybeStopConsumer(AMQPMessage $msg)
+    {
+        if ($this->consumed == $this->target) {
+            $msg->delivery_info[ 'channel' ]->basic_cancel(
+                $msg->delivery_info[ 'consumer_tag' ]
+            );
+        }
+    }
 }
