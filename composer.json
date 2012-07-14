@@ -1,5 +1,5 @@
 {
-    "name": "videlalvaro/Thumper",
+    "name": "videlalvaro/thumper",
     "type": "library",
     "description": "AMQP Tools",
     "keywords": ["library", "AMQP", "RabbitMQ", "PHPAMQPLib", "Thumper"],
