@@ -28,21 +28,31 @@
  */
 namespace Thumper;
 use Thumper\Consumer;
+
 /**
- *
- *
- *
  * @category   Thumper
  * @package    Thumper
  */
 class AnonConsumer extends Consumer
 {
-  public function __construct($host, $port, $user, $pass, $vhost)
-  {
-    parent::__construct(HOST, PORT, USER, PASS, VHOST);
 
-    $this->setQueueOptions(array('name' => '', 'passive' => false, 'durable' => false,
-                                     'exclusive' => true, 'auto_delete' => true, 'nowait' => false,
-                                     'arguments' => null, 'ticket' => null));
-  }
+    /**
+     * @param string $host
+     * @param int    $port
+     * @param string $user
+     * @param string $pass
+     * @param string $vhost
+     */
+    public function __construct($host, $port, $user, $pass, $vhost)
+    {
+        parent::__construct(HOST, PORT, USER, PASS, VHOST);
+
+        $this->setQueueOptions(
+            array(
+                 'name' => '', 'passive' => false, 'durable' => false,
+                 'exclusive' => true, 'auto_delete' => true, 'nowait' => false,
+                 'arguments' => null, 'ticket' => null
+            )
+        );
+    }
 }

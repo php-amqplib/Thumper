@@ -23,16 +23,17 @@
  * SOFTWARE.
  *
  *
- * @category   Thumper
- * @package    Thumper
+ * @package     Thumper
+ * @category    Thumper
+ * @subcategory Examples
  */
 require_once(dirname(dirname(__DIR__)) . '/config/config.php');
 
 $randomInt = function($data)
 {
-  sleep(5);
-  $data = unserialize($data);
-  return rand($data['min'], $data['max']);
+    sleep(5);
+    $data = unserialize($data);
+    return rand($data[ 'min' ], $data[ 'max' ]);
 };
 
 $server = new Thumper\RpcServer(HOST, PORT, USER, PASS, VHOST);

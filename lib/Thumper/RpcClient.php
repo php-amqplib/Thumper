@@ -30,6 +30,7 @@ namespace Thumper;
 use PhpAmqpLib\Message\AMQPMessage;
 use Thumper\BaseAmqp;
 use InvalidArgumentException;
+
 /**
  *
  *
@@ -39,46 +40,82 @@ use InvalidArgumentException;
  */
 class RpcClient extends BaseAmqp
 {
-  protected $requests = 0;
-  protected $replies = array();
-  protected $queueName;
 
-  public function initClient()
-  {
-    list($this->queueName,,) = $this->ch->queue_declare("", false, false, true, true);
-  }
+    /**
+     * @var int
+     */
+    protected $requests = 0;
 
-  public function addRequest($msgBody, $server, $requestId = null, $routingKey = '')
-  {
-    if(empty($requestId))
+    /**
+     * @var array
+     */
+    protected $replies = array();
+
+    /**
+     * @var string
+     */
+    protected $queueName;
+
+    /**
+     *
+     */
+    public function initClient()
     {
-      throw new InvalidArgumentException('You must provide a $requestId');
+        list($this->queueName, ,) =
+            $this->ch->queue_declare("", false, false, true, true);
     }
 
-    $msg = new AMQPMessage($msgBody, array('content_type' => 'text/plain',
-                                           'reply_to' => $this->queueName,
-                                           'correlation_id' => $requestId));
-
-    $this->ch->basic_publish($msg, $server . '-exchange', $routingKey);
-
-    $this->requests++;
-  }
-
-  public function getReplies()
-  {
-    $this->ch->basic_consume($this->queueName, $this->queueName, false, true, false, false, array($this, 'processMessage'));
-
-    while(count($this->replies) < $this->requests)
+    /**
+     * @param string $msgBody
+     * @param string $server
+     * @param string $requestId
+     * @param string $routingKey
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function addRequest($msgBody, $server, $requestId = null,
+                               $routingKey = '')
     {
-      $this->ch->wait();
+        if (empty($requestId)) {
+            throw new InvalidArgumentException('You must provide a $requestId');
+        }
+
+        $msg = new AMQPMessage(
+            $msgBody, array(
+                  'content_type' => 'text/plain',
+                  'reply_to' => $this->queueName,
+                  'correlation_id' => $requestId
+             )
+        );
+
+        $this->ch->basic_publish($msg, $server . '-exchange', $routingKey);
+
+        $this->requests++;
     }
 
-    $this->ch->basic_cancel($this->queueName);
-    return $this->replies;
-  }
+    /**
+     * @return array
+     */
+    public function getReplies()
+    {
+        $this->ch->basic_consume(
+            $this->queueName, $this->queueName, false, true, false, false,
+            array( $this, 'processMessage' )
+        );
 
-  public function processMessage($msg)
-  {
-    $this->replies[$msg->get('correlation_id')] = $msg->body;
-  }
+        while (count($this->replies) < $this->requests) {
+            $this->ch->wait();
+        }
+
+        $this->ch->basic_cancel($this->queueName);
+        return $this->replies;
+    }
+
+    /**
+     * @param $msg
+     */
+    public function processMessage($msg)
+    {
+        $this->replies[ $msg->get('correlation_id') ] = $msg->body;
+    }
 }

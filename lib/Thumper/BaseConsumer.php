@@ -28,20 +28,25 @@
  */
 namespace Thumper;
 use Thumper\BaseAmqp;
+
 /**
- *
- *
- *
  * @category   Thumper
  * @package    Thumper
  */
 class BaseConsumer extends BaseAmqp
 {
-  protected $callback;
 
-  public function setCallback($callback)
-  {
-    $this->callback = $callback;
-  }
+    /**
+     * @var callable|string|array
+     */
+    protected $callback;
+
+    /**
+     * @param callable|string|array $callback
+     */
+    public function setCallback($callback)
+    {
+        $this->callback = $callback;
+    }
 }
 

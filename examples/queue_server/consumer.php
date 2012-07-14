@@ -23,20 +23,33 @@
  * SOFTWARE.
  *
  *
- * @category   Thumper
- * @package    Thumper
+ * @package     Thumper
+ * @category    Thumper
+ * @subcategory Examples
  */
 
 require_once(dirname(dirname(__DIR__)) . '/config/config.php');
 
 $myConsumer = function($msg)
 {
-  echo $msg, "\n";
+    echo $msg, PHP_EOL;
 };
 
 $consumer = new Thumper\Consumer(HOST, PORT, USER, PASS, VHOST);
-$consumer->setExchangeOptions(array('name' => 'hello-exchange', 'type' => 'direct'));
-$consumer->setQueueOptions(array('name' => 'hello-queue'));
-$consumer->setCallback($myConsumer); //myConsumer could be any valid PHP callback
-$consumer->consume(5); //5 is the number of messages to consume
+$consumer->setExchangeOptions(
+    array( 'name' => 'hello-exchange', 'type' => 'direct' )
+);
+$consumer->setQueueOptions(array( 'name' => 'hello-queue' ));
+
+/*
+ * $myConsumer could be any valid PHP callback
+ */
+$consumer->setCallback(
+    $myConsumer
+);
+
+/*
+ * 5 is the number of messages to consume
+ */
+$consumer->consume(5);
 
