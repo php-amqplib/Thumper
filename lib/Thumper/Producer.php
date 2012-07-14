@@ -27,8 +27,7 @@
  * @package    Thumper
  */
 namespace Thumper;
-use Thumper\BaseAmqps,
-    PhpAmqpLib\Message\AMQPMessage;
+use PhpAmqpLib\Message\AMQPMessage;
 /**
  *
  *
