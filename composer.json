@@ -7,14 +7,8 @@
     "autoload": {
         "psr-0": {"Thumper": "lib"}
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "git://github.com/videlalvaro/php-amqplib.git"
-        }
-    ],
     "require": {
         "php": ">=5.3.3",
-        "videlalvaro/php-amqplib" : "master-dev"
+        "videlalvaro/php-amqplib" : "dev-master"
     }
 }
