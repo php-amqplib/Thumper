@@ -22,13 +22,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  *
+ * PHP version 5.3
  *
  * @category   Thumper
  * @package    Thumper
+ * @author     Alvaro Videla
+ * @copyright  2010 Alvaro Videla. All rights reserved.
+ * @license    MIT http://opensource.org/licenses/MIT
+ * @link       https://github.com/videlalvaro/Thumper
  */
 namespace Thumper;
-use Thumper\BaseConsumer;
-use Exception;
+
+use \Thumper\BaseConsumer;
+use \Exception;
+
 /**
  *
  *
@@ -38,40 +45,37 @@ use Exception;
  */
 class Consumer extends BaseConsumer
 {
-  public $consumed = 0;
+    public $consumed = 0;
 
-  public function consume($msgAmount)
-  {
-    $this->target = $msgAmount;
-
-    $this->setUpConsumer();
-
-    while(count($this->ch->callbacks))
+    public function consume($msgAmount)
     {
-      $this->ch->wait();
-    }
-  }
+        $this->target = $msgAmount;
 
-  public function processMessage($msg)
-  {
-    try
-    {
-      call_user_func($this->callback, $msg->body);
-      $msg->delivery_info['channel']->basic_ack($msg->delivery_info['delivery_tag']);
-      $this->consumed++;
-      $this->maybeStopConsumer($msg);
-    }
-    catch (Exception $e)
-    {
-      throw $e;
-    }
-  }
+        $this->setUpConsumer();
 
-  protected function maybeStopConsumer($msg)
-  {
-    if($this->consumed == $this->target)
-    {
-      $msg->delivery_info['channel']->basic_cancel($msg->delivery_info['consumer_tag']);
+        while (count($this->ch->callbacks)) {
+            $this->ch->wait();
+        }
     }
-  }
+
+    public function processMessage($msg)
+    {
+        try {
+            call_user_func($this->callback, $msg->body);
+            $msg->delivery_info['channel']
+                ->basic_ack($msg->delivery_info['delivery_tag']);
+            $this->consumed++;
+            $this->maybeStopConsumer($msg);
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
+    protected function maybeStopConsumer($msg)
+    {
+        if ($this->consumed == $this->target) {
+            $msg->delivery_info['channel']
+                ->basic_cancel($msg->delivery_info['consumer_tag']);
+        }
+    }
 }

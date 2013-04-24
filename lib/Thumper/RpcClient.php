@@ -22,14 +22,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  *
+ * PHP version 5.3
  *
  * @category   Thumper
  * @package    Thumper
+ * @author     Alvaro Videla
+ * @copyright  2010 Alvaro Videla. All rights reserved.
+ * @license    MIT http://opensource.org/licenses/MIT
+ * @link       https://github.com/videlalvaro/Thumper
  */
 namespace Thumper;
-use PhpAmqpLib\Message\AMQPMessage;
-use Thumper\BaseAmqp;
-use InvalidArgumentException;
+
+use \PhpAmqpLib\Message\AMQPMessage;
+use \Thumper\BaseAmqp;
+use \InvalidArgumentException;
+
 /**
  *
  *
@@ -39,46 +46,67 @@ use InvalidArgumentException;
  */
 class RpcClient extends BaseAmqp
 {
-  protected $requests = 0;
-  protected $replies = array();
-  protected $queueName;
+    protected $requests = 0;
+    protected $replies = array();
+    protected $queueName;
 
-  public function initClient()
-  {
-    list($this->queueName,,) = $this->ch->queue_declare("", false, false, true, true);
-  }
-
-  public function addRequest($msgBody, $server, $requestId = null, $routingKey = '')
-  {
-    if(empty($requestId))
+    public function initClient()
     {
-      throw new InvalidArgumentException('You must provide a $requestId');
+        list($this->queueName, , ) = $this->ch->queue_declare(
+            '',
+            false,
+            false,
+            true,
+            true
+        );
     }
 
-    $msg = new AMQPMessage($msgBody, array('content_type' => 'text/plain',
-                                           'reply_to' => $this->queueName,
-                                           'correlation_id' => $requestId));
+    public function addRequest(
+        $msgBody,
+        $server,
+        $requestId = null,
+        $routingKey = ''
+    ) {
+        if (empty($requestId)) {
+            throw new InvalidArgumentException("You must provide a $requestId");
+        }
 
-    $this->ch->basic_publish($msg, $server . '-exchange', $routingKey);
+        $msg = new AMQPMessage(
+            $msgBody,
+            array(
+                'content_type' => 'text/plain',
+                'reply_to' => $this->queueName,
+                'correlation_id' => $requestId
+            )
+        );
 
-    $this->requests++;
-  }
+        $this->ch->basic_publish($msg, $server . '-exchange', $routingKey);
 
-  public function getReplies()
-  {
-    $this->ch->basic_consume($this->queueName, $this->queueName, false, true, false, false, array($this, 'processMessage'));
-
-    while(count($this->replies) < $this->requests)
-    {
-      $this->ch->wait();
+        $this->requests++;
     }
 
-    $this->ch->basic_cancel($this->queueName);
-    return $this->replies;
-  }
+    public function getReplies()
+    {
+        $this->ch>basic_consume(
+            $this->queueName,
+            $this->queueName,
+            false,
+            true,
+            false,
+            false,
+            array($this, 'processMessage')
+        );
 
-  public function processMessage($msg)
-  {
-    $this->replies[$msg->get('correlation_id')] = $msg->body;
-  }
+        while (count($this->replies) < $this->requests) {
+            $this->ch->wait();
+        }
+
+        $this->ch->basic_cancel($this->queueName);
+        return $this->replies;
+    }
+
+    public function processMessage($msg)
+    {
+        $this->replies[$msg->get('correlation_id')] = $msg->body;
+    }
 }
