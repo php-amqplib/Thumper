@@ -1,9 +1,9 @@
 {
-    "name": "videlalvaro/thumper",
+    "name": "popshack/thumper",
     "type": "library",
     "description": "AMQP Tools",
     "keywords": ["library", "AMQP", "RabbitMQ", "PHPAMQPLib", "Thumper"],
-    "homepage": "git://github.com/videlalvaro/Thumper.git",
+    "homepage": "git://github.com/popshack/Thumper.git",
     "autoload": {
         "psr-0": {"Thumper": "lib"}
     },
