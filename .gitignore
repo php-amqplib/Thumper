@@ -1,2 +1,28 @@
-vendor
+.*
+# OS generated files #
+######################
+.DS_Store
+ehthumbs.db
+Icon
+Thumbs.db
+.tmtags
+tags
+vendor.tags
+tmtagsHistory
+
+# IDE generated files #
+#######################
+
+.project
+*.iml
+.idea/
+*.sublime-project
+*.sublime-workspace
+atlassian-ide-plugin.xml
+
 composer.lock
+vendor/*
+data/*
+
+!/.gitignore
+!/.travis.yml
