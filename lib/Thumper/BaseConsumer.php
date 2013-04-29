@@ -22,12 +22,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  *
+ * PHP version 5.3
  *
  * @category   Thumper
  * @package    Thumper
+ * @author     Alvaro Videla
+ * @copyright  2010 Alvaro Videla. All rights reserved.
+ * @license    MIT http://opensource.org/licenses/MIT
+ * @link       https://github.com/videlalvaro/Thumper
  */
 namespace Thumper;
-use Thumper\BaseAmqp;
+
+use \Thumper\BaseAmqp;
+
 /**
  *
  *
@@ -37,11 +44,10 @@ use Thumper\BaseAmqp;
  */
 class BaseConsumer extends BaseAmqp
 {
-  protected $callback;
+    protected $callback;
 
-  public function setCallback($callback)
-  {
-    $this->callback = $callback;
-  }
+    public function setCallback($callback)
+    {
+        $this->callback = $callback;
+    }
 }
-
