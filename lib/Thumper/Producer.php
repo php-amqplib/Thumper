@@ -22,12 +22,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  *
+ * PHP version 5.3
  *
  * @category   Thumper
  * @package    Thumper
+ * @author     Alvaro Videla
+ * @copyright  2010 Alvaro Videla. All rights reserved.
+ * @license    MIT http://opensource.org/licenses/MIT
+ * @link       https://github.com/videlalvaro/Thumper
  */
 namespace Thumper;
-use PhpAmqpLib\Message\AMQPMessage;
+
+use \PhpAmqpLib\Message\AMQPMessage;
+
 /**
  *
  *
@@ -43,11 +50,24 @@ class Producer extends BaseAmqp
     {
         if (!$this->exchangeReady) {
             //declare a durable non autodelete exchange
-            $this->ch->exchange_declare($this->exchangeOptions['name'], $this->exchangeOptions['type'], false, true, false);
+            $this->ch->exchange_declare(
+                $this->exchangeOptions['name'],
+                $this->exchangeOptions['type'],
+                false,
+                true,
+                false
+            );
             $this->exchangeReady = true;
         }
 
-        $msg = new AMQPMessage($msgBody, array('content_type' => 'text/plain', 'delivery_mode' => 2));
-        $this->ch->basic_publish($msg, $this->exchangeOptions['name'], $routingKey);
+        $msg = new AMQPMessage(
+            $msgBody,
+            array('content_type' => 'text/plain', 'delivery_mode' => 2)
+        );
+        $this->ch->basic_publish(
+            $msg,
+            $this->exchangeOptions['name'],
+            $routingKey
+        );
     }
 }

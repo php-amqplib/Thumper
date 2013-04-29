@@ -22,12 +22,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  *
+ * PHP version 5.3
  *
  * @category   Thumper
  * @package    Thumper
+ * @author     Alvaro Videla
+ * @copyright  2010 Alvaro Videla. All rights reserved.
+ * @license    MIT http://opensource.org/licenses/MIT
+ * @link       https://github.com/videlalvaro/Thumper
  */
 namespace Thumper;
-use Thumper\Consumer;
+
+use \Thumper\Consumer;
+
 /**
  *
  *
@@ -37,12 +44,21 @@ use Thumper\Consumer;
  */
 class AnonConsumer extends Consumer
 {
-  public function __construct($host, $port, $user, $pass, $vhost)
-  {
-    parent::__construct(HOST, PORT, USER, PASS, VHOST);
+    public function __construct($host, $port, $user, $pass, $vhost)
+    {
+        parent::__construct(HOST, PORT, USER, PASS, VHOST);
 
-    $this->setQueueOptions(array('name' => '', 'passive' => false, 'durable' => false,
-                                     'exclusive' => true, 'auto_delete' => true, 'nowait' => false,
-                                     'arguments' => null, 'ticket' => null));
-  }
+        $this->setQueueOptions(
+            array(
+                'name' => '',
+                'passive' => false,
+                'durable' => false,
+                'exclusive' => true,
+                'auto_delete' => true,
+                'nowait' => false,
+                'arguments' => null,
+                'ticket' => null
+            )
+        );
+    }
 }
