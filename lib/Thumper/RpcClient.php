@@ -87,7 +87,7 @@ class RpcClient extends BaseAmqp
 
     public function getReplies()
     {
-        $this->ch>basic_consume(
+        $this->ch->basic_consume(
             $this->queueName,
             $this->queueName,
             false,
