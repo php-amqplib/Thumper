@@ -69,6 +69,10 @@ class BaseAmqp
         'ticket' => null
     );
 
+    protected $consumerOptions = array(
+        'qos' => array()
+    );
+
     protected $routingKey = '';
 
     public function __construct($host, $port, $user, $pass, $vhost)
@@ -121,6 +125,11 @@ class BaseAmqp
         $this->routingKey = $routingKey;
     }
 
+    public function setQos($options)
+    {
+        $this->consumerOptions['qos'] = array_merge($this->consumerOptions['qos'], $options);
+    }
+
     protected function setUpConsumer()
     {
         $this->ch->exchange_declare(
@@ -134,6 +143,13 @@ class BaseAmqp
             $this->exchangeOptions['arguments'],
             $this->exchangeOptions['ticket']
         );
+
+        if (!empty($this->consumerOptions['qos'])) {
+            $this->ch->basic_qos(
+                $this->consumerOptions['qos']['prefetch_size'],
+                $this->consumerOptions['qos']['prefetch_count'],
+                $this->consumerOptions['qos']['global']);
+        }
 
         list($queueName,,) = $this->ch->queue_declare(
             $this->queueOptions['name'],
