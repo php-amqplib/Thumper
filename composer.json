@@ -3,7 +3,7 @@
     "type": "library",
     "description": "AMQP Tools",
     "keywords": ["library", "AMQP", "RabbitMQ", "PHPAMQPLib", "Thumper"],
-    "homepage": "git://github.com/videlalvaro/Thumper.git",
+    "homepage": "https://github.com/videlalvaro/Thumper",
     "autoload": {
         "psr-0": {"Thumper": "lib"}
     },
