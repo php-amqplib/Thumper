@@ -87,12 +87,6 @@ class BaseAmqp
         $this->ch = $this->conn->channel();
     }
 
-    public function __destruct()
-    {
-        $this->ch->close();
-        $this->conn->close();
-    }
-
     public function setExchangeOptions($options)
     {
         if (empty($options['name'])) {
