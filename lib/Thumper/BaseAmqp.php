@@ -75,15 +75,9 @@ class BaseAmqp
 
     protected $routingKey = '';
 
-    public function __construct($host, $port, $user, $pass, $vhost)
+    public function __construct(AMQPConnection $conn)
     {
-        $this->conn = new AMQPConnection(
-            $host,
-            $port,
-            $user,
-            $pass,
-            $vhost
-        );
+        $this->conn = $conn;
         $this->ch = $this->conn->channel();
     }
 
