@@ -30,7 +30,7 @@ require_once(dirname(dirname(__DIR__)) . '/config/config.php');
 
 $start = time();
 
-$client = new Thumper\RpcClient(HOST, PORT, USER, PASS, VHOST);
+$client = new Thumper\RpcClient($registry->getConnection());
 $client->initClient();
 $client->addRequest($argv[1], 'charcount', 'charcount'); //charcount is the request identifier
 $client->addRequest(serialize(array('min' => 0, 'max' => (int) $argv[2])), 'random-int', 'random-int'); //random-int is the request identifier
