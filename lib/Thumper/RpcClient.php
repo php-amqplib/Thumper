@@ -46,8 +46,8 @@ use \InvalidArgumentException;
  */
 class RpcClient extends BaseAmqp
 {
-    protected $requests = 0;
-    protected $replies = array();
+    protected $requests;
+    protected $replies;
     protected $queueName;
 
     public function initClient()
@@ -59,6 +59,8 @@ class RpcClient extends BaseAmqp
             true,
             true
         );
+        $this->requests = 0;
+		$this->replies = array();
     }
 
     public function addRequest(
