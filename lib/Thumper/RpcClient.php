@@ -49,7 +49,8 @@ class RpcClient extends BaseAmqp
     protected $requests;
     protected $replies;
     protected $queueName;
-
+    protected $requestTimeout = null;
+	
     public function initClient()
     {
         list($this->queueName, , ) = $this->ch->queue_declare(
@@ -100,7 +101,7 @@ class RpcClient extends BaseAmqp
         );
 
         while (count($this->replies) < $this->requests) {
-            $this->ch->wait();
+            $this->ch->wait(null, null, $this->requestTimeout);
         }
 
         $this->ch->basic_cancel($this->queueName);
@@ -110,5 +111,10 @@ class RpcClient extends BaseAmqp
     public function processMessage($msg)
     {
         $this->replies[$msg->get('correlation_id')] = $msg->body;
+    }
+    
+    public function setTimeout($tm = null)
+    {
+	$this->requestTimeout = $tm;
     }
 }
