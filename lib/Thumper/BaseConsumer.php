@@ -34,6 +34,7 @@
 namespace Thumper;
 
 use \Thumper\BaseAmqp;
+use \Exception;
 
 /**
  *
@@ -48,6 +49,8 @@ class BaseConsumer extends BaseAmqp
 
     public function setCallback($callback)
     {
+        if(is_callable($callback) === false)
+			throw new Exception("Callback $callback invalid");
         $this->callback = $callback;
     }
 }
