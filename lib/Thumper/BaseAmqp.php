@@ -33,7 +33,7 @@
  */
 namespace Thumper;
 
-use \PhpAmqpLib\Connection\AMQPConnection;
+use \PhpAmqpLib\Connection\AMQPLazyConnection;
 use \InvalidArgumentException;
 
 /**
@@ -75,7 +75,7 @@ class BaseAmqp
 
     protected $routingKey = '';
 
-    public function __construct(AMQPConnection $conn)
+    public function __construct(AMQPLazyConnection $conn)
     {
         $this->conn = $conn;
         $this->ch = $this->conn->channel();
