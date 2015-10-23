@@ -9,6 +9,6 @@
     },
     "require": {
         "php": ">=5.3.3",
-        "videlalvaro/php-amqplib" : "~2.4.0"
+        "videlalvaro/php-amqplib" : "~2.6.0"
     }
 }
