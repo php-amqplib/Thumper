@@ -8,7 +8,7 @@
         "psr-0": {"Thumper": "lib"}
     },
     "require": {
-        "php": ">=5.3.3",
+        "php": "^5.3.3|^7.0",
         "videlalvaro/php-amqplib" : "~2.6.0"
     }
 }
