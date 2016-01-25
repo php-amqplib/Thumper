@@ -1,3 +1,7 @@
+# Looking for New Maintainer #
+
+See issue: https://github.com/videlalvaro/Thumper/issues/28
+
 # Thumper #
 
 Thumper is a PHP library that aims to abstract several messaging patterns that can be implemented over RabbitMQ.
