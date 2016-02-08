@@ -103,7 +103,7 @@ abstract class BaseAmqp
      */
     public function setExchangeOptions(array $options)
     {
-        if (empty($options['name'])) {
+        if (!isset($options['name'])) {
             throw new InvalidArgumentException(
                 'You must provide an exchange name'
             );
