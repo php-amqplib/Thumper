@@ -33,7 +33,7 @@
  */
 namespace Thumper;
 
-use \PhpAmqpLib\Connection\AMQPLazyConnection;
+use \PhpAmqpLib\Connection\AMQPConnection;
 use \InvalidArgumentException;
 
 /**
@@ -75,7 +75,7 @@ class BaseAmqp
 
     protected $routingKey = '';
 
-    public function __construct(AMQPLazyConnection $conn)
+    public function __construct(AMQPConnection $conn)
     {
         $this->conn = $conn;
         $this->ch = $this->conn->channel();
@@ -83,7 +83,7 @@ class BaseAmqp
 
     public function setExchangeOptions($options)
     {
-        if (empty($options['name'])) {
+        if (!isset($options['name'])) {
             throw new InvalidArgumentException(
                 'You must provide an exchange name'
             );
