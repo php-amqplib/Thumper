@@ -103,7 +103,7 @@ abstract class BaseAmqp
      */
     public function setExchangeOptions(array $options)
     {
-        if (!isset($options['name'])) {
+        if (!isset($options['name']) || !$this->isValidExchangeName($options['name'])) {
             throw new InvalidArgumentException(
                 'You must provide an exchange name'
             );
@@ -208,5 +208,18 @@ abstract class BaseAmqp
     protected function getConsumerTag()
     {
         return 'PHPPROCESS_' . getmypid();
+    }
+
+    /**
+     * Verifies exchange name meets the 0.9.1 protocol standard.
+     *
+     * letters, digits, hyphen, underscore, period, or colon
+     *
+     * @param string $exchangeName
+     * @return bool
+     */
+    private function isValidExchangeName($exchangeName)
+    {
+        return preg_match('/^[A-Za-z0-9_\-\.\;]*$/', $exchangeName);
     }
 }
