@@ -1,14 +1,17 @@
 {
-    "name": "videlalvaro/thumper",
+    "name": "php-amqplib/thumper",
+    "replace": {
+        "videlalvaro/thumper": "self.version"
+    },
     "type": "library",
     "description": "AMQP Tools",
     "keywords": ["library", "AMQP", "RabbitMQ", "PHPAMQPLib", "Thumper"],
-    "homepage": "https://github.com/videlalvaro/Thumper",
+    "homepage": "https://github.com/php-amqplib/Thumper",
     "autoload": {
         "psr-0": {"Thumper": "lib"}
     },
     "require": {
         "php": ">=5.3.3",
-        "videlalvaro/php-amqplib" : "~2.6.0"
+        "php-amqplib/php-amqplib" : "~2.6.0"
     }
 }

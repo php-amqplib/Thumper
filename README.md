@@ -1,6 +1,6 @@
 # Looking for New Maintainer #
 
-See issue: https://github.com/videlalvaro/Thumper/issues/28
+See issue: https://github.com/php-amqplib/Thumper/issues/28
 
 # Thumper #
 
