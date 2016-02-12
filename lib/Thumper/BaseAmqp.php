@@ -153,26 +153,28 @@ abstract class BaseAmqp
      */
     protected function setUpConsumer()
     {
-        $this->channel
-            ->exchange_declare(
-                $this->exchangeOptions['name'],
-                $this->exchangeOptions['type'],
-                $this->exchangeOptions['passive'],
-                $this->exchangeOptions['durable'],
-                $this->exchangeOptions['auto_delete'],
-                $this->exchangeOptions['internal'],
-                $this->exchangeOptions['nowait'],
-                $this->exchangeOptions['arguments'],
-                $this->exchangeOptions['ticket']
-            );
-
-        if (!empty($this->consumerOptions['qos'])) {
+        if(!empty($this->exchangeOptions['name'])) {
             $this->channel
-                ->basic_qos(
-                    $this->consumerOptions['qos']['prefetch_size'],
-                    $this->consumerOptions['qos']['prefetch_count'],
-                    $this->consumerOptions['qos']['global']
+                ->exchange_declare(
+                    $this->exchangeOptions['name'],
+                    $this->exchangeOptions['type'],
+                    $this->exchangeOptions['passive'],
+                    $this->exchangeOptions['durable'],
+                    $this->exchangeOptions['auto_delete'],
+                    $this->exchangeOptions['internal'],
+                    $this->exchangeOptions['nowait'],
+                    $this->exchangeOptions['arguments'],
+                    $this->exchangeOptions['ticket']
                 );
+
+            if (!empty($this->consumerOptions['qos'])) {
+                $this->channel
+                    ->basic_qos(
+                        $this->consumerOptions['qos']['prefetch_size'],
+                        $this->consumerOptions['qos']['prefetch_count'],
+                        $this->consumerOptions['qos']['global']
+                    );
+            }
         }
 
         list($queueName, , ) = $this->channel
@@ -187,8 +189,10 @@ abstract class BaseAmqp
                 $this->queueOptions['ticket']
             );
 
-        $this->channel
-            ->queue_bind($queueName, $this->exchangeOptions['name'], $this->routingKey);
+        if(!empty($this->exchangeOptions['name'])) {
+            $this->channel
+                ->queue_bind($queueName, $this->exchangeOptions['name'], $this->routingKey);
+        }
 
         $this->channel
             ->basic_consume(
