@@ -83,7 +83,7 @@ class BaseAmqp
 
     public function setExchangeOptions($options)
     {
-        if (empty($options['name'])) {
+        if (!isset($options['name'])) {
             throw new InvalidArgumentException(
                 'You must provide an exchange name'
             );
@@ -120,23 +120,30 @@ class BaseAmqp
 
     protected function setUpConsumer()
     {
-        $this->ch->exchange_declare(
-            $this->exchangeOptions['name'],
-            $this->exchangeOptions['type'],
-            $this->exchangeOptions['passive'],
-            $this->exchangeOptions['durable'],
-            $this->exchangeOptions['auto_delete'],
-            $this->exchangeOptions['internal'],
-            $this->exchangeOptions['nowait'],
-            $this->exchangeOptions['arguments'],
-            $this->exchangeOptions['ticket']
-        );
 
-        if (!empty($this->consumerOptions['qos'])) {
-            $this->ch->basic_qos(
-                $this->consumerOptions['qos']['prefetch_size'],
-                $this->consumerOptions['qos']['prefetch_count'],
-                $this->consumerOptions['qos']['global']);
+        if(!empty($this->exchangeOptions['name'])){
+
+            $this->ch->exchange_declare(
+                $this->exchangeOptions['name'],
+                $this->exchangeOptions['type'],
+                $this->exchangeOptions['passive'],
+                $this->exchangeOptions['durable'],
+                $this->exchangeOptions['auto_delete'],
+                $this->exchangeOptions['internal'],
+                $this->exchangeOptions['nowait'],
+                $this->exchangeOptions['arguments'],
+                $this->exchangeOptions['ticket']
+            );
+
+
+            if (!empty($this->consumerOptions['qos'])) {
+                $this->ch->basic_qos(
+                    $this->consumerOptions['qos']['prefetch_size'],
+                    $this->consumerOptions['qos']['prefetch_count'],
+                    $this->consumerOptions['qos']['global']);
+            }
+
+
         }
 
         list($queueName,,) = $this->ch->queue_declare(
@@ -150,11 +157,14 @@ class BaseAmqp
             $this->queueOptions['ticket']
         );
 
-        $this->ch->queue_bind(
-            $queueName,
-            $this->exchangeOptions['name'],
-            $this->routingKey
-        );
+
+        if(!empty($this->exchangeOptions['name'])){
+            $this->ch->queue_bind(
+                $queueName,
+                $this->exchangeOptions['name'],
+                $this->routingKey
+            );
+        }
         $this->ch->basic_consume(
             $queueName,
             $this->getConsumerTag(),
