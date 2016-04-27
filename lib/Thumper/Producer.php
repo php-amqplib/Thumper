@@ -46,7 +46,7 @@ class Producer extends BaseAmqp
      * @param string $messageBody
      * @param string $routingKey
      */
-    public function publish($messageBody, $routingKey = null)
+    public function publish($messageBody, $routingKey = '')
     {
         if (!$this->exchangeReady) {
             //declare a durable non autodelete exchange
@@ -67,7 +67,7 @@ class Producer extends BaseAmqp
         $this->channel->basic_publish(
             $message,
             $this->exchangeOptions['name'],
-            !is_null($routingKey) ?: $this->routingKey
+            !empty($routingKey) ? $routingKey : $this->routingKey
         );
     }
 }
