@@ -90,15 +90,15 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 
 [ico-version]: https://img.shields.io/packagist/v/php-amqplib/thumper.svg?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-[ico-travis]: https://img.shields.io/travis/php-amqplib/thumper/master.svg?style=flat-square
-[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/php-amqplib/thumper.svg?style=flat-square
-[ico-code-quality]: https://img.shields.io/scrutinizer/g/php-amqplib/thumper.svg?style=flat-square
+[ico-travis]: https://img.shields.io/travis/php-amqplib/Thumper/master.svg?style=flat-square
+[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/php-amqplib/Thumper.svg?style=flat-square
+[ico-code-quality]: https://img.shields.io/scrutinizer/g/php-amqplib/Thumper.svg?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/php-amqplib/thumper.svg?style=flat-square
 
-[link-packagist]: https://packagist.org/packages/php-amqplib/thumper
-[link-travis]: https://travis-ci.org/php-amqplib/thumper
-[link-scrutinizer]: https://scrutinizer-ci.com/g/php-amqplib/thumper/code-structure
-[link-code-quality]: https://scrutinizer-ci.com/g/php-amqplib/thumper
+[link-packagist]: https://packagist.org/packages/php-amqplib/Thumper
+[link-travis]: https://travis-ci.org/php-amqplib/Thumper
+[link-scrutinizer]: https://scrutinizer-ci.com/g/php-amqplib/Thumper/code-structure
+[link-code-quality]: https://scrutinizer-ci.com/g/php-amqplib/Thumper
 [link-downloads]: https://packagist.org/packages/php-amqplib/thumper
 [link-author]: https://github.com/:author_username
 [link-contributors]: ../../contributors
