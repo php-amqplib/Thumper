@@ -90,7 +90,7 @@ class RpcServer extends BaseConsumer
 
     /**
      * Send reply.
-     * 
+     *
      * @param string $result
      * @param string $client
      * @param string $correlationId

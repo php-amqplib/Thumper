@@ -39,14 +39,14 @@ class Consumer extends BaseConsumer
 {
     /**
      * Number of messages consumed.
-     * 
+     *
      * @var int
      */
     public $consumed = 0;
 
     /**
      * Target number of messages to consume.
-     * 
+     *
      * @var int
      */
     private $target;
