@@ -8,9 +8,9 @@ php:
   - 7.0
   - hhvm
 
-# This triggers builds to run on the new TravisCI infrastructure.
-# See: http://docs.travis-ci.com/user/workers/container-based-infrastructure/
-sudo: false
+# RabbitMQ requires setuid flags, so you can only run RabbitMQ on standard, OSX or Trusty infrastructure
+# (ie, your .travis.yml must contain sudo: required
+sudo: required
 
 matrix:
   fast_finish: true
