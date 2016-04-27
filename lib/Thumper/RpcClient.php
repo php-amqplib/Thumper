@@ -123,7 +123,7 @@ class RpcClient extends BaseAmqp
         );
 
         while (count($this->replies) < $this->requests) {
-            $this->channel->wait(null, null, $this->requestTimeout);
+            $this->channel->wait(null, false, $this->requestTimeout);
         }
 
         $this->channel->basic_cancel($this->queueName);
