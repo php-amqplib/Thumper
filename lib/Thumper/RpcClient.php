@@ -33,27 +33,36 @@
  */
 namespace Thumper;
 
-use \PhpAmqpLib\Message\AMQPMessage;
-use \Thumper\BaseAmqp;
-use \InvalidArgumentException;
+use PhpAmqpLib\Message\AMQPMessage;
 
-/**
- *
- *
- *
- * @category   Thumper
- * @package    Thumper
- */
 class RpcClient extends BaseAmqp
 {
+    /**
+     * @var int
+     */
     protected $requests;
+
+    /**
+     * @var string[]
+     */
     protected $replies;
+
+    /**
+     * @var string
+     */
     protected $queueName;
+
+    /**
+     * @var int
+     */
     protected $requestTimeout = null;
-	
+
+    /**
+     * Initialize client.
+     */
     public function initClient()
     {
-        list($this->queueName, , ) = $this->ch->queue_declare(
+        list($this->queueName, ,) = $this->channel->queue_declare(
             '',
             false,
             false,
@@ -61,21 +70,29 @@ class RpcClient extends BaseAmqp
             true
         );
         $this->requests = 0;
-		$this->replies = array();
+        $this->replies = array();
     }
 
+    /**
+     * Add request to be sent to RPC Server.
+     *
+     * @param string $messageBody
+     * @param string $server
+     * @param string $requestId
+     * @param string $routingKey
+     */
     public function addRequest(
-        $msgBody,
+        $messageBody,
         $server,
-        $requestId = null,
+        $requestId,
         $routingKey = ''
     ) {
         if (empty($requestId)) {
-            throw new InvalidArgumentException("You must provide a $requestId");
+            throw new \InvalidArgumentException("You must provide a request ID");
         }
 
-        $msg = new AMQPMessage(
-            $msgBody,
+        $message = new AMQPMessage(
+            $messageBody,
             array(
                 'content_type' => 'text/plain',
                 'reply_to' => $this->queueName,
@@ -83,14 +100,19 @@ class RpcClient extends BaseAmqp
             )
         );
 
-        $this->ch->basic_publish($msg, $server . '-exchange', $routingKey);
+        $this->channel->basic_publish($message, $server . '-exchange', $routingKey);
 
         $this->requests++;
     }
 
+    /**
+     * Get replies.
+     *
+     * @return array
+     */
     public function getReplies()
     {
-        $this->ch->basic_consume(
+        $this->channel->basic_consume(
             $this->queueName,
             $this->queueName,
             false,
@@ -101,20 +123,27 @@ class RpcClient extends BaseAmqp
         );
 
         while (count($this->replies) < $this->requests) {
-            $this->ch->wait(null, null, $this->requestTimeout);
+            $this->channel->wait(null, null, $this->requestTimeout);
         }
 
-        $this->ch->basic_cancel($this->queueName);
+        $this->channel->basic_cancel($this->queueName);
+
         return $this->replies;
     }
 
-    public function processMessage($msg)
+    /**
+     * @param AMQPMessage $message
+     */
+    public function processMessage(AMQPMessage $message)
     {
-        $this->replies[$msg->get('correlation_id')] = $msg->body;
+        $this->replies[$message->get('correlation_id')] = $message->body;
     }
-    
-    public function setTimeout($tm = null)
+
+    /**
+     * @param int $timeout
+     */
+    public function setTimeout($timeout)
     {
-	$this->requestTimeout = $tm;
+        $this->requestTimeout = $timeout;
     }
 }

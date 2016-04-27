@@ -33,19 +33,15 @@
  */
 namespace Thumper;
 
-use \PhpAmqpLib\Message\AMQPMessage;
-use \Thumper\BaseConsumer;
-use \Exception;
+use PhpAmqpLib\Message\AMQPMessage;
 
-/**
- *
- *
- *
- * @category   Thumper
- * @package    Thumper
- */
 class RpcServer extends BaseConsumer
 {
+    /**
+     * Initialize Server.
+     *
+     * @param string $name Server name
+     */
     public function initServer($name)
     {
         $this->setExchangeOptions(
@@ -54,36 +50,51 @@ class RpcServer extends BaseConsumer
         $this->setQueueOptions(array('name' => $name . '-queue'));
     }
 
+    /**
+     * Start server.
+     */
     public function start()
     {
         $this->setUpConsumer();
 
-        while (count($this->ch->callbacks)) {
-            $this->ch->wait();
+        while (count($this->channel->callbacks)) {
+            $this->channel->wait();
         }
     }
 
-    public function processMessage($msg)
+    /**
+     * Process message.
+     *
+     * @param AMQPMessage $message
+     */
+    public function processMessage($message)
     {
         try {
-            $msg->delivery_info['channel']->basic_ack(
-                $msg->delivery_info['delivery_tag']
+            $message->delivery_info['channel']->basic_ack(
+                $message->delivery_info['delivery_tag']
             );
-            $result = call_user_func($this->callback, $msg->body);
+            $result = call_user_func($this->callback, $message->body);
             $this->sendReply(
                 $result,
-                $msg->get('reply_to'),
-                $msg->get('correlation_id')
+                $message->get('reply_to'),
+                $message->get('correlation_id')
             );
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->sendReply(
                 'error: ' . $e->getMessage(),
-                $msg->get('reply_to'),
-                $msg->get('correlation_id')
+                $message->get('reply_to'),
+                $message->get('correlation_id')
             );
         }
     }
 
+    /**
+     * Send reply.
+     * 
+     * @param string $result
+     * @param string $client
+     * @param string $correlationId
+     */
     protected function sendReply($result, $client, $correlationId)
     {
         $reply = new AMQPMessage(
@@ -93,6 +104,6 @@ class RpcServer extends BaseConsumer
                 'correlation_id' => $correlationId
             )
         );
-        $this->ch->basic_publish($reply, '', $client);
+        $this->channel->basic_publish($reply, '', $client);
     }
 }

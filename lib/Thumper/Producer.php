@@ -33,24 +33,24 @@
  */
 namespace Thumper;
 
-use \PhpAmqpLib\Message\AMQPMessage;
+use PhpAmqpLib\Message\AMQPMessage;
 
-/**
- *
- *
- *
- * @category   Thumper
- * @package    Thumper
- */
 class Producer extends BaseAmqp
 {
+    /**
+     * @var bool
+     */
     protected $exchangeReady = false;
 
-    public function publish($msgBody, $routingKey = false)
+    /**
+     * @param string $messageBody
+     * @param string $routingKey
+     */
+    public function publish($messageBody, $routingKey = null)
     {
         if (!$this->exchangeReady) {
             //declare a durable non autodelete exchange
-            $this->ch->exchange_declare(
+            $this->channel->exchange_declare(
                 $this->exchangeOptions['name'],
                 $this->exchangeOptions['type'],
                 false,
@@ -60,14 +60,14 @@ class Producer extends BaseAmqp
             $this->exchangeReady = true;
         }
 
-        $msg = new AMQPMessage(
-            $msgBody,
+        $message = new AMQPMessage(
+            $messageBody,
             array('content_type' => 'text/plain', 'delivery_mode' => 2)
         );
-        $this->ch->basic_publish(
-            $msg,
+        $this->channel->basic_publish(
+            $message,
             $this->exchangeOptions['name'],
-            $routingKey ?: $this->routingKey
+            !is_null($routingKey) ?: $this->routingKey
         );
     }
 }

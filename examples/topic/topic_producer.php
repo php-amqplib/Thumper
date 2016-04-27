@@ -27,7 +27,7 @@
  * @package    Thumper
  */
 
-require_once(dirname(dirname(__DIR__)) . '/config/config.php');
+require __DIR__ . '/../../config/config.php';
 
 $producer = new Thumper\Producer($registry->getConnection());
 $producer->setExchangeOptions(array('name' => 'logs-exchange', 'type' => 'topic'));

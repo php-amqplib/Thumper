@@ -27,7 +27,7 @@
  * @package    Thumper
  */
 
-require_once(dirname(dirname(__DIR__)) . '/config/config.php');
+require __DIR__ . '/../../config/config.php';
 
 $client = new Thumper\RpcClient($registry->getConnection());
 $client->initClient();
@@ -36,4 +36,3 @@ echo "Waiting for replies…\n";
 $replies = $client->getReplies();
 
 var_dump($replies);
-

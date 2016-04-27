@@ -27,11 +27,10 @@
  * @package    Thumper
  */
 
-require_once(dirname(dirname(__DIR__)) . '/config/config.php');
+require __DIR__ . '/../../config/config.php';
 
-$myConsumer = function($msg)
-{
-  echo $msg, "\n";
+$myConsumer = function ($msg) {
+    echo $msg, "\n";
 };
 
 $consumer = new Thumper\Consumer($registry->getConnection());
@@ -39,4 +38,3 @@ $consumer->setExchangeOptions(array('name' => 'hello-exchange', 'type' => 'direc
 $consumer->setQueueOptions(array('name' => 'hello-queue'));
 $consumer->setCallback($myConsumer); //myConsumer could be any valid PHP callback
 $consumer->consume(5); //5 is the number of messages to consume
-

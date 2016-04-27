@@ -33,21 +33,25 @@
  */
 namespace Thumper;
 
-use \PhpAmqpLib\Connection\AMQPLazyConnection;
-use \InvalidArgumentException;
+use InvalidArgumentException;
+use PhpAmqpLib\Channel\AMQPChannel;
+use PhpAmqpLib\Connection\AbstractConnection;
 
-/**
- *
- *
- *
- * @category   Thumper
- * @package    Thumper
- */
-class BaseAmqp
+abstract class BaseAmqp
 {
-    protected $conn;
-    protected $ch;
+    /**
+     * @var AbstractConnection
+     */
+    protected $connection;
 
+    /**
+     * @var AMQPChannel
+     */
+    protected $channel;
+
+    /**
+     * @var array
+     */
     protected $exchangeOptions = array(
         'passive' => false,
         'durable' => true,
@@ -58,6 +62,9 @@ class BaseAmqp
         'ticket' => null
     );
 
+    /**
+     * @var array
+     */
     protected $queueOptions = array(
         'name' => '',
         'passive' => false,
@@ -69,19 +76,32 @@ class BaseAmqp
         'ticket' => null
     );
 
+    /**
+     * @var array
+     */
     protected $consumerOptions = array(
         'qos' => array()
     );
 
+    /**
+     * @var string
+     */
     protected $routingKey = '';
 
-    public function __construct(AMQPLazyConnection $conn)
+    /**
+     * BaseAmqp constructor.
+     * @param AbstractConnection $connection
+     */
+    public function __construct(AbstractConnection $connection)
     {
-        $this->conn = $conn;
-        $this->ch = $this->conn->channel();
+        $this->connection = $connection;
+        $this->channel = $this->connection->channel();
     }
 
-    public function setExchangeOptions($options)
+    /**
+     * @param array $options
+     */
+    public function setExchangeOptions(array $options)
     {
         if (empty($options['name'])) {
             throw new InvalidArgumentException(
@@ -94,13 +114,17 @@ class BaseAmqp
                 'You must provide an exchange type'
             );
         }
+
         $this->exchangeOptions = array_merge(
             $this->exchangeOptions,
             $options
         );
     }
 
-    public function setQueueOptions($options)
+    /**
+     * @param array $options
+     */
+    public function setQueueOptions(array $options)
     {
         $this->queueOptions = array_merge(
             $this->queueOptions,
@@ -108,19 +132,28 @@ class BaseAmqp
         );
     }
 
+    /**
+     * @param string $routingKey
+     */
     public function setRoutingKey($routingKey)
     {
         $this->routingKey = $routingKey;
     }
 
-    public function setQos($options)
+    /**
+     * @param array $options
+     */
+    public function setQos(array $options)
     {
         $this->consumerOptions['qos'] = array_merge($this->consumerOptions['qos'], $options);
     }
 
+    /**
+     * Setup consumer.
+     */
     protected function setUpConsumer()
     {
-        $this->ch->exchange_declare(
+        $this->channel->exchange_declare(
             $this->exchangeOptions['name'],
             $this->exchangeOptions['type'],
             $this->exchangeOptions['passive'],
@@ -133,13 +166,14 @@ class BaseAmqp
         );
 
         if (!empty($this->consumerOptions['qos'])) {
-            $this->ch->basic_qos(
+            $this->channel->basic_qos(
                 $this->consumerOptions['qos']['prefetch_size'],
                 $this->consumerOptions['qos']['prefetch_count'],
-                $this->consumerOptions['qos']['global']);
+                $this->consumerOptions['qos']['global']
+            );
         }
 
-        list($queueName,,) = $this->ch->queue_declare(
+        list($queueName, ,) = $this->channel->queue_declare(
             $this->queueOptions['name'],
             $this->queueOptions['passive'],
             $this->queueOptions['durable'],
@@ -150,12 +184,12 @@ class BaseAmqp
             $this->queueOptions['ticket']
         );
 
-        $this->ch->queue_bind(
+        $this->channel->queue_bind(
             $queueName,
             $this->exchangeOptions['name'],
             $this->routingKey
         );
-        $this->ch->basic_consume(
+        $this->channel->basic_consume(
             $queueName,
             $this->getConsumerTag(),
             false,
@@ -166,6 +200,9 @@ class BaseAmqp
         );
     }
 
+    /**
+     * @return string
+     */
     protected function getConsumerTag()
     {
         return 'PHPPROCESS_' . getmypid();

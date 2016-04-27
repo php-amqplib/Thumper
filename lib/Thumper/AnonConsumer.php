@@ -33,20 +33,13 @@
  */
 namespace Thumper;
 
-use \Thumper\Consumer;
+use PhpAmqpLib\Connection\AbstractConnection;
 
-/**
- *
- *
- *
- * @category   Thumper
- * @package    Thumper
- */
 class AnonConsumer extends Consumer
 {
-    public function __construct($host, $port, $user, $pass, $vhost)
+    public function __construct(AbstractConnection $connection)
     {
-        parent::__construct(HOST, PORT, USER, PASS, VHOST);
+        parent::__construct($connection);
 
         $this->setQueueOptions(
             array(

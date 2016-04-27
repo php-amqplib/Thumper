@@ -26,7 +26,7 @@
  * @category   Thumper
  * @package    Thumper
  */
-require_once(dirname(dirname(__DIR__)) . '/config/config.php');
+require __DIR__ . '/../../config/config.php';
 
 $start = time();
 
@@ -40,4 +40,3 @@ $replies = $client->getReplies();
 var_dump($replies);
 
 echo "Total time: ", time() - $start, "\n";
-

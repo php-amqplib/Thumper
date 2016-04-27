@@ -1,8 +1,12 @@
 <?php
-require_once dirname(__DIR__) . '/vendor/autoload.php';
+
+require __DIR__ . '/../vendor/autoload.php';
+
+use PhpAmqpLib\Connection\AMQPLazyConnection;
+use Thumper\ConnectionRegistry;
 
 $connections = array(
-    'default' => new \PhpAmqpLib\Connection\AMQPLazyConnection('localhost', 5672, 'guest', 'guest', '/')
+    'default' => new AMQPLazyConnection('localhost', 5672, 'guest', 'guest', '/')
 );
 
-$registry = new \Thumper\ConnectionRegistry($connections, 'default');
+$registry = new ConnectionRegistry($connections, 'default');

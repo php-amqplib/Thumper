@@ -27,11 +27,11 @@
  * @package    Thumper
  */
 
-require_once(dirname(dirname(__DIR__)) . '/config/config.php');
+require __DIR__ . '/../../config/config.php';
 
-$myConsumer = function($msg)
-{
-  echo $msg, "\n";
+$myConsumer = function ($msg) {
+
+    echo $msg, "\n";
 };
 
 $consumer = new Thumper\AnonConsumer($registry->getConnection());
@@ -39,4 +39,3 @@ $consumer->setExchangeOptions(array('name' => 'logs-exchange', 'type' => 'topic'
 $consumer->setRoutingKey($argv[1]);
 $consumer->setCallback($myConsumer);
 $consumer->consume(5);
-

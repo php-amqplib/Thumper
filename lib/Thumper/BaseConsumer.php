@@ -33,24 +33,22 @@
  */
 namespace Thumper;
 
-use \Thumper\BaseAmqp;
-use \Exception;
-
-/**
- *
- *
- *
- * @category   Thumper
- * @package    Thumper
- */
-class BaseConsumer extends BaseAmqp
+abstract class BaseConsumer extends BaseAmqp
 {
+    /**
+     * @var callable
+     */
     protected $callback;
 
+    /**
+     * @param callable $callback
+     * @throws \Exception
+     */
     public function setCallback($callback)
     {
-        if(is_callable($callback) === false)
-			throw new Exception("Callback $callback invalid");
+        if (is_callable($callback) === false) {
+            throw new \Exception("Callback $callback is not callable.");
+        }
         $this->callback = $callback;
     }
 }

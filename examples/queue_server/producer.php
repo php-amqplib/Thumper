@@ -27,9 +27,8 @@
  * @package    Thumper
  */
 
-require_once(dirname(dirname(__DIR__)) . '/config/config.php');
+require __DIR__ . '/../../config/config.php';
 
 $producer = new Thumper\Producer($registry->getConnection());
 $producer->setExchangeOptions(array('name' => 'hello-exchange', 'type' => 'direct'));
 $producer->publish($argv[1]); //The first argument will be the published message
-

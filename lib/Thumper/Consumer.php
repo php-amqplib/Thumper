@@ -33,49 +33,58 @@
  */
 namespace Thumper;
 
-use \Thumper\BaseConsumer;
-use \Exception;
+use PhpAmqpLib\Message\AMQPMessage;
 
-/**
- *
- *
- *
- * @category   Thumper
- * @package    Thumper
- */
 class Consumer extends BaseConsumer
 {
+    /**
+     * Number of messages consumed.
+     * 
+     * @var int
+     */
     public $consumed = 0;
 
-    public function consume($msgAmount)
+    /**
+     * Target number of messages to consume.
+     * 
+     * @var int
+     */
+    private $target;
+
+    /**
+     * @param int $numOfMessages
+     */
+    public function consume($numOfMessages)
     {
-        $this->target = $msgAmount;
+        $this->target = $numOfMessages;
 
         $this->setUpConsumer();
 
-        while (count($this->ch->callbacks)) {
-            $this->ch->wait();
+        while (count($this->channel->callbacks)) {
+            $this->channel->wait();
         }
     }
 
-    public function processMessage($msg)
+    /**
+     * @param AMQPMessage $message
+     */
+    public function processMessage(AMQPMessage $message)
     {
-        try {
-            call_user_func($this->callback, $msg->body);
-            $msg->delivery_info['channel']
-                ->basic_ack($msg->delivery_info['delivery_tag']);
-            $this->consumed++;
-            $this->maybeStopConsumer($msg);
-        } catch (Exception $e) {
-            throw $e;
-        }
+        call_user_func($this->callback, $message->body);
+        $message->delivery_info['channel']
+            ->basic_ack($message->delivery_info['delivery_tag']);
+        $this->consumed++;
+        $this->maybeStopConsumer($message);
     }
 
-    protected function maybeStopConsumer($msg)
+    /**
+     * @param AMQPMessage $message
+     */
+    protected function maybeStopConsumer(AMQPMessage $message)
     {
         if ($this->consumed == $this->target) {
-            $msg->delivery_info['channel']
-                ->basic_cancel($msg->delivery_info['consumer_tag']);
+            $message->delivery_info['channel']
+                ->basic_cancel($message->delivery_info['consumer_tag']);
         }
     }
 }

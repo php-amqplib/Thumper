@@ -27,11 +27,11 @@
  * @package    Thumper
  */
 
-require_once(dirname(dirname(__DIR__)) . '/config/config.php');
+require __DIR__ . '/../../config/config.php';
 
-$myConsumer = function($msg)
-{
-  echo $msg, "\n";
+$myConsumer = function ($msg) {
+
+    echo $msg, "\n";
 };
 
 $consumer = new Thumper\Consumer($registry->getConnection());
