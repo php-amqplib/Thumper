@@ -82,7 +82,6 @@ This code is experimental. The idea is to show how easy is to implement such pat
 
 ## Credits
 
-- [:author_name][link-author]
 - [All Contributors][link-contributors]
 
 ## License
