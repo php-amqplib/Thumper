@@ -62,7 +62,7 @@ class RpcClient extends BaseAmqp
      */
     public function initClient()
     {
-        list($this->queueName, ,) = $this->channel->queue_declare(
+        list($this->queueName, , ) = $this->channel->queue_declare(
             '',
             false,
             false,
