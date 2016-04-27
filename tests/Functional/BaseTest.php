@@ -13,6 +13,6 @@ abstract class BaseTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->connection = new AMQPStreamConnection('127.0.0.1', 5672, 'guest', 'guest');
+        $this->connection = new AMQPStreamConnection('localhost', 5672, 'guest', 'guest');
     }
 }
