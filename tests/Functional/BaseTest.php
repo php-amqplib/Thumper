@@ -13,6 +13,6 @@ abstract class BaseTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->connection = new AMQPSocketConnection('localhost', 5672, 'guest', 'guest');
+        $this->connection = new AMQPSocketConnection('localhost', 5672, 'guest', 'guest', '/');
     }
 }
