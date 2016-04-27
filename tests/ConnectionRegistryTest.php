@@ -41,8 +41,7 @@ class ConnectionRegistryTest extends BaseTest
 
         $registry = new ConnectionRegistry($connections, 'default');
 
-        $this->expectException('\InvalidArgumentException');
-        $this->expectExceptionMessage('AMQP Connection named "not-found" does not exist.');
+        $this->setExpectedException('\InvalidArgumentException', 'AMQP Connection named "not-found" does not exist.');
         $registry->getConnection('not-found');
     }
 }
