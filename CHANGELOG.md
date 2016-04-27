@@ -8,3 +8,4 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 
 ### Added
 - Added many package maintenance files
+- Some unit tests
