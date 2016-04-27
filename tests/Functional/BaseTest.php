@@ -2,17 +2,17 @@
 
 namespace Thumper\Test\Functional;
 
-use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Connection\AMQPSocketConnection;
 
 abstract class BaseTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var AMQPStreamConnection
+     * @var AMQPSocketConnection
      */
     protected $connection;
 
     public function setUp()
     {
-        $this->connection = new AMQPStreamConnection('localhost', 5672, 'guest', 'guest');
+        $this->connection = new AMQPSocketConnection('localhost', 5672, 'guest', 'guest');
     }
 }
