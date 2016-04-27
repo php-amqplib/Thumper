@@ -10,7 +10,7 @@ php:
 
 # RabbitMQ requires setuid flags, so you can only run RabbitMQ on standard, OSX or Trusty infrastructure
 # (ie, your .travis.yml must contain sudo: required
-sudo: required
+sudo: false
 
 matrix:
   fast_finish: true
@@ -28,6 +28,3 @@ script:
 
 after_script:
   - if [[ $TRAVIS_PHP_VERSION != 'hhvm' ]]; then php vendor/bin/ocular code-coverage:upload --format=php-clover coverage.clover; fi
-
-services:
-  - rabbitmq
