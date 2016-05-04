@@ -5,7 +5,7 @@ use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Message\AMQPMessage;
 use Thumper\RpcClient;
 
-class RpcClientTest extends \PHPUnit_Framework_TestCase
+class RpcClientTest extends BaseTest
 {
     /**
      * @var RpcClient
@@ -19,7 +19,14 @@ class RpcClientTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->client = new RpcClient($this->getMockConnection());
+        $mockConnection = $this->getMockConnection();
+        $this->mockChannel = $this->getMockChannel();
+
+        $mockConnection->expects($this->once())
+            ->method('channel')
+            ->willReturn($this->mockChannel);
+
+        $this->client = new RpcClient($mockConnection);
     }
 
     /**
@@ -55,16 +62,13 @@ class RpcClientTest extends \PHPUnit_Framework_TestCase
                 $routingKey
             );
 
-        $this->setClientProperty('queueName', $queueName);
+        $this->setReflectionProperty($this->client, 'queueName', $queueName);
 
         $this->client
             ->addRequest($message, $server, $requestId, $routingKey);
 
-        $reflectionClass = $this->getClientReflection();
-        $requests = $reflectionClass->getProperty('requests');
-        $requests->setAccessible(true);
-
-        $this->assertEquals(1, $requests->getValue($this->client));
+        $requests = $this->getReflectionPropertyValue($this->client, 'requests');
+        $this->assertEquals(1, $requests);
     }
 
     /**
@@ -105,7 +109,7 @@ class RpcClientTest extends \PHPUnit_Framework_TestCase
     public function getReplies($requests)
     {
         $queueName = uniqid('queueName', true);
-        $this->setClientProperty('queueName', $queueName);
+        $this->setReflectionProperty($this->client, 'queueName', $queueName);
 
         $this->mockChannel
             ->expects($this->once())
@@ -116,12 +120,10 @@ class RpcClientTest extends \PHPUnit_Framework_TestCase
             ->expects($this->exactly($requests))
             ->method('wait')
             ->with(null, false, null)
-            ->willReturnCallback(function() {
-                $repliesProperty = $this->getClientProperty('replies');
-
-                $repliesValue = $repliesProperty->getValue($this->client);
-                $repliesValue[] = 'reply';
-                $repliesProperty->setValue($this->client, $repliesValue);
+            ->willReturnCallback(function () {
+                $replies = $this->getReflectionPropertyValue($this->client, 'replies');
+                $replies[] = 'reply';
+                $this->setReflectionProperty($this->client, 'replies', $replies);
             });
 
         $this->mockChannel
@@ -129,31 +131,12 @@ class RpcClientTest extends \PHPUnit_Framework_TestCase
             ->method('basic_cancel')
             ->with($queueName);
 
-        $this->setClientProperty('requests', $requests);
+        $this->setReflectionProperty($this->client, 'requests', $requests);
 
         $replies = $this->client
             ->getReplies();
 
         $this->assertEquals($requests, count($replies));
-    }
-
-    /**
-     * @return \PhpAmqpLib\Connection\AbstractConnection|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getMockConnection()
-    {
-        $mockConnection = $this->getMockBuilder('\PhpAmqpLib\Connection\AbstractConnection')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->mockChannel = $this->getMockBuilder('\PhpAmqpLib\Channel\AMQPChannel')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $mockConnection->expects($this->once())
-            ->method('channel')
-            ->willReturn($this->mockChannel);
-
-        return $mockConnection;
     }
 
     /**
@@ -168,9 +151,7 @@ class RpcClientTest extends \PHPUnit_Framework_TestCase
         $this->client
             ->processMessage($mockMessage);
 
-        $repliesProperty = $this->getClientProperty('replies');
-        $replies = $repliesProperty->getValue($this->client);
-
+        $replies = $this->getReflectionPropertyValue($this->client, 'replies');
         $this->assertEquals([$correlationId => $body], $replies);
     }
 
@@ -183,8 +164,107 @@ class RpcClientTest extends \PHPUnit_Framework_TestCase
         $this->client
             ->setTimeout($timeout);
 
-        $requestTimeoutProperty = $this->getClientProperty('requestTimeout');
-        $this->assertEquals($timeout, $requestTimeoutProperty->getValue($this->client));
+        $requestTimeout = $this->getReflectionPropertyValue($this->client, 'requestTimeout');
+        $this->assertEquals($timeout, $requestTimeout);
+    }
+
+    /**
+     * @test
+     */
+    public function setExchangeOptionsHappyPath()
+    {
+        $test = uniqid('test', true);
+        $name = uniqid('name', true);
+        $type = uniqid('type', true);
+        $this->client
+            ->setExchangeOptions(
+                [
+                    'name' => $name,
+                    'type' => $type,
+                    'internal' => true,
+                    'test' => $test
+                ]
+            );
+
+        $exchangeOptions = $this->getReflectionPropertyValue($this->client, 'exchangeOptions');
+
+        $this->assertArrayHasKey('test', $exchangeOptions);
+        $this->assertEquals($test, $exchangeOptions['test']);
+
+        $this->assertEquals($name, $exchangeOptions['name']);
+        $this->assertEquals($name, $exchangeOptions['name']);
+        $this->assertEquals(true, $exchangeOptions['internal']);
+        $this->assertEquals(false, $exchangeOptions['passive']);
+    }
+
+    /**
+     * @test
+     * @param $key
+     * @param array $options
+     * @dataProvider setExchangeOptionsExceptionDataProvider
+     */
+    public function setExchangeOptionsThrowsExceptions($key, $options)
+    {
+        $this->setExpectedException('\InvalidArgumentException', 'You must provide an exchange ' . $key);
+
+        $this->client
+            ->setExchangeOptions($options);
+    }
+
+    /**
+     * @test
+     */
+    public function setQueueOptions()
+    {
+        $name = uniqid('name', true);
+        $test = uniqid('test', true);
+        $queueOptions = [
+            'name' => $name,
+            'test' => $test
+        ];
+
+        $this->client
+            ->setQueueOptions($queueOptions);
+
+        $queueOptionsValue = $this->getReflectionPropertyValue($this->client, 'queueOptions');
+
+        $this->assertArrayHasKey('test', $queueOptionsValue);
+        $this->assertEquals($test, $queueOptionsValue['test']);
+
+        $this->assertEquals($name, $queueOptionsValue['name']);
+        $this->assertFalse($queueOptionsValue['passive']);
+        $this->assertNull($queueOptionsValue['ticket']);
+    }
+
+    /**
+     * @test
+     */
+    public function setRoutingKey()
+    {
+        $routingKey = uniqid('routingKey', true);
+
+        $this->client
+            ->setRoutingKey($routingKey);
+
+        $routingKeyValue = $this->getReflectionPropertyValue($this->client, 'routingKey');
+
+        $this->assertEquals($routingKey, $routingKeyValue);
+    }
+
+    /**
+     * @test
+     */
+    public function setQos()
+    {
+        $test = uniqid('test');
+
+        $this->client
+            ->setQos(['test' => $test]);
+
+        $consumerOptions = $this->getReflectionPropertyValue($this->client, 'consumerOptions');
+
+        $this->assertArrayHasKey('test', $consumerOptions['qos']);
+        $this->assertEquals($test, $consumerOptions['qos']['test']);
     }
 
     /**
@@ -212,40 +292,55 @@ class RpcClientTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    /**
-     * @return \ReflectionClass
-     */
-    private function getClientReflection()
+    public function setExchangeOptionsExceptionDataProvider()
     {
-        static $reflection;
-
-        if ($reflection !== null) {
-            return $reflection;
-        }
-
-        $reflection = new \ReflectionClass($this->client);
-        return $reflection;
+        return [
+            [
+                'name',
+                []
+            ],
+            [
+                'name',
+                ['type' => 'type']
+            ],
+            [
+                'name',
+                ['name' => '']
+            ],
+            [
+                'name',
+                ['name' => false]
+            ],
+            [
+                'name',
+                ['name' => 0]
+            ],
+            [
+                'type',
+                ['name' => 'name']
+            ],
+            [
+                'type',
+                [
+                    'name' => 'name',
+                    'type' => false
+                ]
+            ],
+            [
+                'type',
+                [
+                    'name' => 'name',
+                    'type' => 0
+                ]
+            ],
+            [
+                'type',
+                [
+                    'name' => 'name',
+                    'type' => ''
+                ]
+            ]
+        ];
     }
 
-    /**
-     * @param $name
-     * @param $value
-     */
-    private function setClientProperty($name, $value)
-    {
-        $requestsProperty = $this->getClientProperty($name);
-        $requestsProperty->setValue($this->client, $value);
-    }
-
-    /**
-     * @param $name
-     * @return \ReflectionProperty
-     */
-    private function getClientProperty($name)
-    {
-        $reflectionClass = $this->getClientReflection();
-        $requestsProperty = $reflectionClass->getProperty($name);
-        $requestsProperty->setAccessible(true);
-        return $requestsProperty;
-    }
 }
