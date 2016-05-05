@@ -33,6 +33,8 @@
  */
 namespace Thumper;
 
+use PhpAmqpLib\Exception\AMQPInvalidArgumentException;
+use PhpAmqpLib\Exception\AMQPRuntimeException;
 use PhpAmqpLib\Message\AMQPMessage;
 
 class RpcServer extends BaseConsumer
@@ -66,25 +68,22 @@ class RpcServer extends BaseConsumer
      * Process message.
      *
      * @param AMQPMessage $message
+     * @throws \OutOfBoundsException
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
-    public function processMessage($message)
+    public function processMessage(AMQPMessage $message)
     {
         try {
-            $message->delivery_info['channel']->basic_ack(
-                $message->delivery_info['delivery_tag']
-            );
+            $message->delivery_info['channel']
+                ->basic_ack($message->delivery_info['delivery_tag']);
             $result = call_user_func($this->callback, $message->body);
-            $this->sendReply(
-                $result,
-                $message->get('reply_to'),
-                $message->get('correlation_id')
-            );
-        } catch (\Exception $e) {
-            $this->sendReply(
-                'error: ' . $e->getMessage(),
-                $message->get('reply_to'),
-                $message->get('correlation_id')
-            );
+            $this->sendReply($result, $message->get('reply_to'), $message->get('correlation_id'));
+        }
+        catch(AMQPRuntimeException $exception) {
+            $this->sendReply('error: ' . $exception->getMessage(), $message->get('reply_to'), $message->get('correlation_id'));
+        }
+        catch(AMQPInvalidArgumentException $exception) {
+            $this->sendReply('error: ' . $exception->getMessage(), $message->get('reply_to'), $message->get('correlation_id'));
         }
     }
 
@@ -94,6 +93,7 @@ class RpcServer extends BaseConsumer
      * @param string $result
      * @param string $client
      * @param string $correlationId
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     protected function sendReply($result, $client, $correlationId)
     {
@@ -104,6 +104,7 @@ class RpcServer extends BaseConsumer
                 'correlation_id' => $correlationId
             )
         );
-        $this->channel->basic_publish($reply, '', $client);
+        $this->channel
+            ->basic_publish($reply, '', $client);
     }
 }
