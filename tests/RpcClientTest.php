@@ -116,14 +116,15 @@ class RpcClientTest extends BaseTest
             ->method('basic_consume')
             ->with($queueName, $queueName, false, true, false, false, array($this->client, 'processMessage'));
 
+        $self = $this;
         $this->mockChannel
             ->expects($this->exactly($requests))
             ->method('wait')
             ->with(null, false, null)
-            ->willReturnCallback(function () {
-                $replies = $this->getReflectionPropertyValue($this->client, 'replies');
+            ->willReturnCallback(function () use ($self) {
+                $replies = $self->getReflectionPropertyValue($self->client, 'replies');
                 $replies[] = 'reply';
-                $this->setReflectionProperty($this->client, 'replies', $replies);
+                $self->setReflectionProperty($self->client, 'replies', $replies);
             });
 
         $this->mockChannel

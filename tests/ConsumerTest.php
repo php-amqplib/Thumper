@@ -54,11 +54,12 @@ class ConsumerTest extends BaseTest
 
         $this->mockChannel
             ->callbacks = array('one');
+        $self = $this;
         $this->mockChannel
             ->expects($this->atLeastOnce())
             ->method('wait')
-            ->willReturnCallback(function () {
-                array_pop($this->mockChannel->callbacks);
+            ->willReturnCallback(function () use ($self) {
+                array_pop($self->mockChannel->callbacks);
             });
 
         $this->mockChannel
@@ -152,11 +153,12 @@ class ConsumerTest extends BaseTest
 
         $this->mockChannel
             ->callbacks = array('one');
+        $self = $this;
         $this->mockChannel
             ->expects($this->never())
             ->method('wait')
-            ->willReturnCallback(function () {
-                array_pop($this->mockChannel->callbacks);
+            ->willReturnCallback(function () use ($self) {
+                array_pop($self->mockChannel->callbacks);
             });
 
         $this->mockChannel
@@ -199,11 +201,12 @@ class ConsumerTest extends BaseTest
 
         $this->mockChannel
             ->callbacks = array('one');
+        $self = $this;
         $this->mockChannel
             ->expects($this->never())
             ->method('wait')
-            ->willReturnCallback(function () {
-                array_pop($this->mockChannel->callbacks);
+            ->willReturnCallback(function () use ($self) {
+                array_pop($self->mockChannel->callbacks);
             });
 
         $this->mockChannel
@@ -246,10 +249,11 @@ class ConsumerTest extends BaseTest
 
         $this->mockChannel
             ->callbacks = array('one');
+        $self = $this;
         $this->mockChannel
             ->expects($this->never())
             ->method('wait')
-            ->willReturnCallback(function () {
+            ->willReturnCallback(function () use ($self) {
                 array_pop($this->mockChannel->callbacks);
             });
 

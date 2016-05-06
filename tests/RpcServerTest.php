@@ -138,11 +138,12 @@ class RpcServerTest extends BaseTest
     public function startWithChannelCallbacks($callbacks)
     {
         $this->mockChannel->callbacks = $callbacks;
+        $self = $this;
         $this->mockChannel
             ->expects($this->atLeast(count($callbacks)))
             ->method('wait')
-            ->willReturnCallback(function () {
-                array_pop($this->mockChannel->callbacks);
+            ->willReturnCallback(function () use ($self) {
+                array_pop($self->mockChannel->callbacks);
             });
 
         $this->startHappyPath();
