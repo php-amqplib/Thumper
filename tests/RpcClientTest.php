@@ -10,7 +10,7 @@ class RpcClientTest extends BaseTest
     /**
      * @var RpcClient
      */
-    private $client;
+    public $client;
 
     /**
      * @var AMQPChannel|\PHPUnit_Framework_MockObject_MockObject
