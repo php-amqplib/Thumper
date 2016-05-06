@@ -93,9 +93,9 @@ class RpcClientTest extends BaseTest
             ->expects($this->exactly(1))
             ->method('queue_declare')
             ->with('', false, false, true, true)
-            ->willReturn([
+            ->willReturn(array(
                 'queueName'
-            ]);
+            ));
 
         $this->client
             ->initClient();
@@ -114,7 +114,7 @@ class RpcClientTest extends BaseTest
         $this->mockChannel
             ->expects($this->once())
             ->method('basic_consume')
-            ->with($queueName, $queueName, false, true, false, false, [$this->client, 'processMessage']);
+            ->with($queueName, $queueName, false, true, false, false, array($this->client, 'processMessage'));
 
         $this->mockChannel
             ->expects($this->exactly($requests))
@@ -146,13 +146,13 @@ class RpcClientTest extends BaseTest
     {
         $body = uniqid('body', true);
         $correlationId = uniqid('correlationid', true);
-        $mockMessage = new AMQPMessage($body, ['correlation_id' => $correlationId]);
+        $mockMessage = new AMQPMessage($body, array('correlation_id' => $correlationId));
 
         $this->client
             ->processMessage($mockMessage);
 
         $replies = $this->getReflectionPropertyValue($this->client, 'replies');
-        $this->assertEquals([$correlationId => $body], $replies);
+        $this->assertEquals(array($correlationId => $body), $replies);
     }
 
     /**
@@ -178,12 +178,12 @@ class RpcClientTest extends BaseTest
         $type = uniqid('type', true);
         $this->client
             ->setExchangeOptions(
-                [
+                array(
                     'name' => $name,
                     'type' => $type,
                     'internal' => true,
                     'test' => $test
-                ]
+                )
             );
 
         $exchangeOptions = $this->getReflectionPropertyValue($this->client, 'exchangeOptions');
@@ -218,10 +218,10 @@ class RpcClientTest extends BaseTest
     {
         $name = uniqid('name', true);
         $test = uniqid('test', true);
-        $queueOptions = [
+        $queueOptions = array(
             'name' => $name,
             'test' => $test
-        ];
+        );
 
         $this->client
             ->setQueueOptions($queueOptions);
@@ -259,7 +259,7 @@ class RpcClientTest extends BaseTest
         $test = uniqid('test', true);
 
         $this->client
-            ->setQos(['test' => $test]);
+            ->setQos(array('test' => $test));
 
         $consumerOptions = $this->getReflectionPropertyValue($this->client, 'consumerOptions');
 
@@ -272,12 +272,12 @@ class RpcClientTest extends BaseTest
      */
     public function requestIdDataProvider()
     {
-        return [
-            'empty string' => [''],
-            'false' => [false],
-            'null' => [null],
-            '0' => [0]
-        ];
+        return array(
+            'empty string' => array(''),
+            'false' => array(false),
+            'null' => array(null),
+            '0' => array(0)
+        );
     }
 
     /**
@@ -285,62 +285,61 @@ class RpcClientTest extends BaseTest
      */
     public function getRepliesDataProvider()
     {
-        return [
-            [0],
-            [1],
-            [2]
-        ];
+        return array(
+            array(0),
+            array(1),
+            array(2)
+        );
     }
 
     public function setExchangeOptionsExceptionDataProvider()
     {
-        return [
-            [
+        return array(
+            array(
                 'name',
-                []
-            ],
-            [
+                array()
+            ),
+            array(
                 'name',
-                ['type' => 'type']
-            ],
-            [
+                array('type' => 'type')
+            ),
+            array(
                 'name',
-                ['name' => '']
-            ],
-            [
+                array('name' => '')
+            ),
+            array(
                 'name',
-                ['name' => false]
-            ],
-            [
+                array('name' => false)
+            ),
+            array(
                 'name',
-                ['name' => 0]
-            ],
-            [
+                array('name' => 0)
+            ),
+            array(
                 'type',
-                ['name' => 'name']
-            ],
-            [
+                array('name' => 'name')
+            ),
+            array(
                 'type',
-                [
+                array(
                     'name' => 'name',
                     'type' => false
-                ]
-            ],
-            [
+                )
+            ),
+            array(
                 'type',
-                [
+                array(
                     'name' => 'name',
                     'type' => 0
-                ]
-            ],
-            [
+                )
+            ),
+            array(
                 'type',
-                [
+                array(
                     'name' => 'name',
                     'type' => ''
-                ]
-            ]
-        ];
+                )
+            )
+        );
     }
-
 }

@@ -49,10 +49,10 @@ class ProducerTest extends BaseTest
         $exchangeType = uniqid('exchangeType', true);
         
         $this->producer
-            ->setExchangeOptions([
+            ->setExchangeOptions(array(
                 'name' => $exchangeName,
                 'type' => $exchangeType
-            ]);
+            ));
 
         $this->mockChannel
             ->expects($this->once())
@@ -89,10 +89,10 @@ class ProducerTest extends BaseTest
         $exchangeType = uniqid('exchangeType', true);
 
         $this->producer
-            ->setExchangeOptions([
+            ->setExchangeOptions(array(
                 'name' => $exchangeName,
                 'type' => $exchangeType
-            ]);
+            ));
 
         $this->mockChannel
             ->expects($this->once())
@@ -123,10 +123,10 @@ class ProducerTest extends BaseTest
         $exchangeType = uniqid('exchangeType', true);
 
         $this->producer
-            ->setExchangeOptions([
+            ->setExchangeOptions(array(
                 'name' => $exchangeName,
                 'type' => $exchangeType
-            ]);
+            ));
 
         $this->mockChannel
             ->expects($this->once())
@@ -154,17 +154,17 @@ class ProducerTest extends BaseTest
      */
     public function declareExchangeDataProvider()
     {
-        return [
-            [new AMQPOutOfBoundsException('Out of Bounds')],
-            [new AMQPRuntimeException('Runtime Exception')]
-        ];
+        return array(
+            array(new AMQPOutOfBoundsException('Out of Bounds')),
+            array(new AMQPRuntimeException('Runtime Exception'))
+        );
     }
 
     public function publishMessageExceptionDataProvider()
     {
-        return [
-            [new AMQPInvalidArgumentException('Invalid Argument')],
-            [new AMQPRuntimeException('Runtime Exception')]
-        ];
+        return array(
+            array(new AMQPInvalidArgumentException('Invalid Argument')),
+            array(new AMQPRuntimeException('Runtime Exception'))
+        );
     }
 }

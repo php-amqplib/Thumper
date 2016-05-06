@@ -47,13 +47,13 @@ class ConsumerTest extends BaseTest
         $queueName = uniqid('queueName', true);
 
         $this->consumer
-            ->setExchangeOptions([
+            ->setExchangeOptions(array(
                 'name' => $name,
                 'type' => 'direct'
-            ]);
+            ));
 
         $this->mockChannel
-            ->callbacks = ['one'];
+            ->callbacks = array('one');
         $this->mockChannel
             ->expects($this->atLeastOnce())
             ->method('wait')
@@ -68,7 +68,7 @@ class ConsumerTest extends BaseTest
         $this->mockChannel
             ->expects($this->once())
             ->method('queue_declare')
-            ->willReturn([$queueName, 0, 1]);
+            ->willReturn(array($queueName, 0, 1));
         $this->mockChannel
             ->expects($this->once())
             ->method('queue_bind');
@@ -103,10 +103,10 @@ class ConsumerTest extends BaseTest
         $name = uniqid('name', true);
 
         $this->consumer
-            ->setExchangeOptions([
+            ->setExchangeOptions(array(
                 'name' => $name,
                 'type' => 'direct'
-            ]);
+            ));
 
         $this->mockChannel
             ->expects($this->never())
@@ -145,13 +145,13 @@ class ConsumerTest extends BaseTest
         $name = uniqid('name', true);
 
         $this->consumer
-            ->setExchangeOptions([
+            ->setExchangeOptions(array(
                 'name' => $name,
                 'type' => 'direct'
-            ]);
+            ));
 
         $this->mockChannel
-            ->callbacks = ['one'];
+            ->callbacks = array('one');
         $this->mockChannel
             ->expects($this->never())
             ->method('wait')
@@ -192,13 +192,13 @@ class ConsumerTest extends BaseTest
         $name = uniqid('name', true);
 
         $this->consumer
-            ->setExchangeOptions([
+            ->setExchangeOptions(array(
                 'name' => $name,
                 'type' => 'direct'
-            ]);
+            ));
 
         $this->mockChannel
-            ->callbacks = ['one'];
+            ->callbacks = array('one');
         $this->mockChannel
             ->expects($this->never())
             ->method('wait')
@@ -239,13 +239,13 @@ class ConsumerTest extends BaseTest
         $name = uniqid('name', true);
 
         $this->consumer
-            ->setExchangeOptions([
+            ->setExchangeOptions(array(
                 'name' => $name,
                 'type' => 'direct'
-            ]);
+            ));
 
         $this->mockChannel
-            ->callbacks = ['one'];
+            ->callbacks = array('one');
         $this->mockChannel
             ->expects($this->never())
             ->method('wait')
@@ -348,9 +348,9 @@ class ConsumerTest extends BaseTest
 
     public function setUpConsumerExceptions()
     {
-        return [
-            [new AMQPOutOfBoundsException('Out of Bounds')],
-            [new AMQPRuntimeException('Runtime Exception')]
-        ];
+        return array(
+            array(new AMQPOutOfBoundsException('Out of Bounds')),
+            array(new AMQPRuntimeException('Runtime Exception'))
+        );
     }
 }
