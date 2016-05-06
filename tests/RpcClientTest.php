@@ -256,7 +256,7 @@ class RpcClientTest extends BaseTest
      */
     public function setQos()
     {
-        $test = uniqid('test');
+        $test = uniqid('test', true);
 
         $this->client
             ->setQos(['test' => $test]);
