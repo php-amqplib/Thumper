@@ -76,7 +76,6 @@ class ProducerTest extends BaseTest
 
     /**
      * @param \Exception $exception
-     * @param string $expectedMessage
      * @test
      * @dataProvider declareExchangeDataProvider
      * @throws \Thumper\Exception\Exception

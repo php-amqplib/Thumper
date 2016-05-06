@@ -82,7 +82,7 @@ class RpcServerTest extends BaseTest
             ->expects($this->once())
             ->method('queue_declare')
             ->with($name . '-queue')
-            ->willReturn([$queueName, false, false]);
+            ->willReturn(array($queueName, false, false));
 
         $this->mockChannel
             ->expects($this->once())
@@ -99,9 +99,9 @@ class RpcServerTest extends BaseTest
                 false,
                 false,
                 false,
-                [$this->server, 'processMessage'],
+                array($this->server, 'processMessage'),
                 null,
-                []
+                array()
             );
 
         $this->server
@@ -120,11 +120,11 @@ class RpcServerTest extends BaseTest
 
         $this->server
             ->setQos(
-                [
+                array(
                     'prefetch_size' => 5,
                     'prefetch_count' => 1,
                     'global' => true
-                ]
+                )
             );
 
         $this->startHappyPath();
@@ -246,11 +246,11 @@ class RpcServerTest extends BaseTest
      */
     public function startChannelCallbackDataProvider()
     {
-        return [
-            '1' => [[1]],
-            '0' => [[]],
-            '3' => [[1, 2, 3]]
-        ];
+        return array(
+            '1' => array(array(1)),
+            '0' => array(array()),
+            '3' => array(array(1, 2, 3))
+        );
     }
 
     /**
@@ -258,9 +258,9 @@ class RpcServerTest extends BaseTest
      */
     public function processMessagesFailuresDataProvider()
     {
-        return [
-            [new AMQPRuntimeException('Index Out of Bounds')],
-            [new AMQPInvalidArgumentException('Invalid Argument')]
-        ];
+        return array(
+            array(new AMQPRuntimeException('Index Out of Bounds')),
+            array(new AMQPInvalidArgumentException('Invalid Argument'))
+        );
     }
 }
