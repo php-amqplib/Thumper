@@ -137,7 +137,7 @@ class ProducerTest extends BaseTest
             ->method('basic_publish')
             ->with(
                 $this->callback(function (AMQPMessage $message) use ($body) {
-                    return $message->getBody() === $body;
+                    return $message->body === $body;
                 }),
                 $exchangeName,
                 ''
