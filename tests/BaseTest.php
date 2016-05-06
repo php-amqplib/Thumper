@@ -50,7 +50,7 @@ abstract class BaseTest extends \PHPUnit_Framework_TestCase
      * @param string $name
      * @param mixed $value
      */
-    protected function setReflectionProperty($object, $name, $value)
+    public function setReflectionProperty($object, $name, $value)
     {
         $requestsProperty = $this->getReflectionProperty($object, $name);
         $requestsProperty->setValue($object, $value);
@@ -61,7 +61,7 @@ abstract class BaseTest extends \PHPUnit_Framework_TestCase
      * @param $name
      * @return \ReflectionProperty
      */
-    protected function getReflectionProperty($object, $name)
+    public function getReflectionProperty($object, $name)
     {
         $reflectionClass = $this->getReflection($object);
         $requestsProperty = $reflectionClass->getProperty($name);
@@ -74,7 +74,7 @@ abstract class BaseTest extends \PHPUnit_Framework_TestCase
      * @param string $propertyName
      * @return mixed
      */
-    protected function getReflectionPropertyValue($object, $propertyName)
+    public function getReflectionPropertyValue($object, $propertyName)
     {
         $reflectionProperty = $this->getReflectionProperty($object, $propertyName);
         return $reflectionProperty->getValue($object);

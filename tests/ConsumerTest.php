@@ -23,7 +23,7 @@ class ConsumerTest extends BaseTest
     /**
      * @var AMQPChannel|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockChannel;
+    public $mockChannel;
 
     public function setUp()
     {

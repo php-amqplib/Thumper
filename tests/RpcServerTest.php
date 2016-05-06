@@ -11,7 +11,7 @@ class RpcServerTest extends BaseTest
     /**
      * @var \PhpAmqpLib\Channel\AMQPChannel|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockChannel;
+    public $mockChannel;
 
     /**
      * @var \PhpAmqpLib\Connection\AbstractConnection|\PHPUnit_Framework_MockObject_MockObject
