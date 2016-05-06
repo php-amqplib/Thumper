@@ -78,11 +78,9 @@ class RpcServer extends BaseConsumer
                 ->basic_ack($message->delivery_info['delivery_tag']);
             $result = call_user_func($this->callback, $message->body);
             $this->sendReply($result, $message->get('reply_to'), $message->get('correlation_id'));
-        }
-        catch(AMQPRuntimeException $exception) {
+        } catch (AMQPRuntimeException $exception) {
             $this->sendReply('error: ' . $exception->getMessage(), $message->get('reply_to'), $message->get('correlation_id'));
-        }
-        catch(AMQPInvalidArgumentException $exception) {
+        } catch (AMQPInvalidArgumentException $exception) {
             $this->sendReply('error: ' . $exception->getMessage(), $message->get('reply_to'), $message->get('correlation_id'));
         }
     }

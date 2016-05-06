@@ -287,7 +287,7 @@ class ConsumerTest extends BaseTest
         $message->delivery_info['delivery_tag'] = $deliveryTag;
 
         $this->consumer
-            ->setCallback(function() {});
+            ->setCallback(function () {});
 
         $this->mockChannel
             ->expects($this->once())
@@ -317,7 +317,7 @@ class ConsumerTest extends BaseTest
         $message->delivery_info['consumer_tag'] = $consumerTag;
 
         $this->consumer
-            ->setCallback(function() {});
+            ->setCallback(function () {});
 
         $this->mockChannel
             ->expects($this->once())

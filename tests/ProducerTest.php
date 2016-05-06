@@ -63,7 +63,7 @@ class ProducerTest extends BaseTest
             ->expects($this->once())
             ->method('basic_publish')
             ->with(
-                $this->callback(function(AMQPMessage $message) use ($body) {
+                $this->callback(function (AMQPMessage $message) use ($body) {
                     return $message->getBody() === $body;
                 }),
                 $exchangeName,
@@ -137,7 +137,7 @@ class ProducerTest extends BaseTest
             ->expects($this->once())
             ->method('basic_publish')
             ->with(
-                $this->callback(function(AMQPMessage $message) use ($body) {
+                $this->callback(function (AMQPMessage $message) use ($body) {
                     return $message->getBody() === $body;
                 }),
                 $exchangeName,

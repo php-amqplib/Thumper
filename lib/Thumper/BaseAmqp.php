@@ -175,7 +175,7 @@ abstract class BaseAmqp
                 );
         }
 
-        list($queueName, ,) = $this->channel
+        list($queueName, , ) = $this->channel
             ->queue_declare(
                 $this->queueOptions['name'],
                 $this->queueOptions['passive'],

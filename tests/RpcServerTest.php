@@ -167,7 +167,7 @@ class RpcServerTest extends BaseTest
         $message->delivery_info['reply_to'] = $replyTo;
         $message->delivery_info['correlation_id'] = $correlationId;
 
-        $callback = function() use ($result) {
+        $callback = function () use ($result) {
             return $result;
         };
         $this->server
@@ -231,7 +231,7 @@ class RpcServerTest extends BaseTest
         $message->delivery_info['delivery_tag'] = $deliveryTag;
         $message->delivery_info['correlation_id'] = $correlationId;
 
-        $callback = function() use ($result) {
+        $callback = function () use ($result) {
             return $result;
         };
         $this->server
