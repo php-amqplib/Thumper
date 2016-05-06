@@ -179,7 +179,7 @@ class RpcServerTest extends BaseTest
             ->method('basic_publish')
             ->with(
                 static::callback(function (AMQPMessage $message) use ($result) {
-                    return $message->getBody() === $result;
+                    return $message->body === $result;
                 }),
                 '',
                 $replyTo,
@@ -217,7 +217,7 @@ class RpcServerTest extends BaseTest
             ->method('basic_publish')
             ->with(
                 static::callback(function (AMQPMessage $message) use ($expectedException) {
-                    return $message->getBody() === 'error: '. $expectedException->getMessage();
+                    return $message->body === 'error: '. $expectedException->getMessage();
                 }),
                 '',
                 $replyTo,
