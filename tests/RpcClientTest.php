@@ -305,18 +305,6 @@ class RpcClientTest extends BaseTest
                 array('type' => 'type')
             ),
             array(
-                'name',
-                array('name' => '')
-            ),
-            array(
-                'name',
-                array('name' => false)
-            ),
-            array(
-                'name',
-                array('name' => 0)
-            ),
-            array(
                 'type',
                 array('name' => 'name')
             ),

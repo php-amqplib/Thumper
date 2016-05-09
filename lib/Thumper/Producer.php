@@ -49,14 +49,16 @@ class Producer extends BaseAmqp
     public function publish($messageBody, $routingKey = '')
     {
         if (!$this->exchangeReady) {
-            //declare a durable non autodelete exchange
-            $this->channel->exchange_declare(
-                $this->exchangeOptions['name'],
-                $this->exchangeOptions['type'],
-                false,
-                true,
-                false
-            );
+            if(isset($this->exchangeOptions['name'])) {
+                //declare a durable non autodelete exchange
+                $this->channel->exchange_declare(
+                    $this->exchangeOptions['name'],
+                    $this->exchangeOptions['type'],
+                    false,
+                    true,
+                    false
+                );
+            }
             $this->exchangeReady = true;
         }
 

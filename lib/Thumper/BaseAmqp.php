@@ -103,7 +103,7 @@ abstract class BaseAmqp
      */
     public function setExchangeOptions(array $options)
     {
-        if (empty($options['name'])) {
+        if (!isset($options['name']) || !$this->isValidExchangeName($options['name'])) {
             throw new InvalidArgumentException(
                 'You must provide an exchange name'
             );
@@ -153,26 +153,28 @@ abstract class BaseAmqp
      */
     protected function setUpConsumer()
     {
-        $this->channel
-            ->exchange_declare(
-                $this->exchangeOptions['name'],
-                $this->exchangeOptions['type'],
-                $this->exchangeOptions['passive'],
-                $this->exchangeOptions['durable'],
-                $this->exchangeOptions['auto_delete'],
-                $this->exchangeOptions['internal'],
-                $this->exchangeOptions['nowait'],
-                $this->exchangeOptions['arguments'],
-                $this->exchangeOptions['ticket']
-            );
-
-        if (!empty($this->consumerOptions['qos'])) {
+        if(isset($this->exchangeOptions['name'])) {
             $this->channel
-                ->basic_qos(
-                    $this->consumerOptions['qos']['prefetch_size'],
-                    $this->consumerOptions['qos']['prefetch_count'],
-                    $this->consumerOptions['qos']['global']
+                ->exchange_declare(
+                    $this->exchangeOptions['name'],
+                    $this->exchangeOptions['type'],
+                    $this->exchangeOptions['passive'],
+                    $this->exchangeOptions['durable'],
+                    $this->exchangeOptions['auto_delete'],
+                    $this->exchangeOptions['internal'],
+                    $this->exchangeOptions['nowait'],
+                    $this->exchangeOptions['arguments'],
+                    $this->exchangeOptions['ticket']
                 );
+
+            if (!empty($this->consumerOptions['qos'])) {
+                $this->channel
+                    ->basic_qos(
+                        $this->consumerOptions['qos']['prefetch_size'],
+                        $this->consumerOptions['qos']['prefetch_count'],
+                        $this->consumerOptions['qos']['global']
+                    );
+            }
         }
 
         list($queueName, , ) = $this->channel
@@ -187,8 +189,10 @@ abstract class BaseAmqp
                 $this->queueOptions['ticket']
             );
 
-        $this->channel
-            ->queue_bind($queueName, $this->exchangeOptions['name'], $this->routingKey);
+        if(isset($this->exchangeOptions['name'])) {
+            $this->channel
+                ->queue_bind($queueName, $this->exchangeOptions['name'], $this->routingKey);
+        }
 
         $this->channel
             ->basic_consume(
@@ -208,5 +212,18 @@ abstract class BaseAmqp
     protected function getConsumerTag()
     {
         return 'PHPPROCESS_' . getmypid();
+    }
+
+    /**
+     * Verifies exchange name meets the 0.9.1 protocol standard.
+     *
+     * letters, digits, hyphen, underscore, period, or colon
+     *
+     * @param string $exchangeName
+     * @return bool
+     */
+    private function isValidExchangeName($exchangeName)
+    {
+        return preg_match('/^[A-Za-z0-9_\-\.\;]*$/', $exchangeName);
     }
 }
