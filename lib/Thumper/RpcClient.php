@@ -62,13 +62,7 @@ class RpcClient extends BaseAmqp
      */
     public function initClient()
     {
-        list($this->queueName, , ) = $this->channel->queue_declare(
-            '',
-            false,
-            false,
-            true,
-            true
-        );
+        list($this->queueName, , ) = $this->channel->queue_declare('', false, false, true, true);
         $this->requests = 0;
         $this->replies = array();
     }
@@ -81,12 +75,8 @@ class RpcClient extends BaseAmqp
      * @param string $requestId
      * @param string $routingKey
      */
-    public function addRequest(
-        $messageBody,
-        $server,
-        $requestId,
-        $routingKey = ''
-    ) {
+    public function addRequest($messageBody, $server, $requestId, $routingKey = '')
+    {
         if (empty($requestId)) {
             throw new \InvalidArgumentException("You must provide a request ID");
         }
@@ -100,7 +90,8 @@ class RpcClient extends BaseAmqp
             )
         );
 
-        $this->channel->basic_publish($message, $server . '-exchange', $routingKey);
+        $this->channel
+            ->basic_publish($message, $server . '-exchange', $routingKey);
 
         $this->requests++;
     }
@@ -112,21 +103,24 @@ class RpcClient extends BaseAmqp
      */
     public function getReplies()
     {
-        $this->channel->basic_consume(
-            $this->queueName,
-            $this->queueName,
-            false,
-            true,
-            false,
-            false,
-            array($this, 'processMessage')
-        );
+        $this->channel
+            ->basic_consume(
+                $this->queueName,
+                $this->queueName,
+                false,
+                true,
+                false,
+                false,
+                array($this, 'processMessage')
+            );
 
         while (count($this->replies) < $this->requests) {
-            $this->channel->wait(null, false, $this->requestTimeout);
+            $this->channel
+                ->wait(null, false, $this->requestTimeout);
         }
 
-        $this->channel->basic_cancel($this->queueName);
+        $this->channel
+            ->basic_cancel($this->queueName);
 
         return $this->replies;
     }
