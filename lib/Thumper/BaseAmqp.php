@@ -153,7 +153,7 @@ abstract class BaseAmqp
      */
     protected function setUpConsumer()
     {
-        if(isset($this->exchangeOptions['name'])) {
+        if (isset($this->exchangeOptions['name'])) {
             $this->channel
                 ->exchange_declare(
                     $this->exchangeOptions['name'],
@@ -189,7 +189,7 @@ abstract class BaseAmqp
                 $this->queueOptions['ticket']
             );
 
-        if(isset($this->exchangeOptions['name'])) {
+        if (isset($this->exchangeOptions['name'])) {
             $this->channel
                 ->queue_bind($queueName, $this->exchangeOptions['name'], $this->routingKey);
         }
