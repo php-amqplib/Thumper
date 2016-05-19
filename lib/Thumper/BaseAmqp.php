@@ -39,6 +39,9 @@ use PhpAmqpLib\Connection\AbstractConnection;
 
 abstract class BaseAmqp
 {
+
+    const NONPERSISTENT = 1;
+    const PERSISTENT = 2;
     /**
      * @var AbstractConnection
      */
@@ -87,6 +90,13 @@ abstract class BaseAmqp
      * @var string
      */
     protected $routingKey = '';
+
+    /**
+     * @var array
+     */
+    protected $parameters = array(
+        'content_type' => 'text/plain'
+    );
 
     /**
      * BaseAmqp constructor.
@@ -225,5 +235,22 @@ abstract class BaseAmqp
     private function isValidExchangeName($exchangeName)
     {
         return preg_match('/^[A-Za-z0-9_\-\.\;]*$/', $exchangeName);
+    }
+
+    /**
+     * @param string $key
+     * @param string $value
+     */
+    public function setParameter($key, $value)
+    {
+        $this->parameters[$key] = $value;
+    }
+
+    /**
+     * @return array
+     */
+    public function getParameters()
+    {
+        return $this->parameters;
     }
 }
