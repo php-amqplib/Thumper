@@ -61,10 +61,12 @@ class Producer extends BaseAmqp
             }
             $this->exchangeReady = true;
         }
+        
+        $this->setParameter('delivery_mode', self::PERSISTENT);
 
         $message = new AMQPMessage(
             $messageBody,
-            array('content_type' => 'text/plain', 'delivery_mode' => 2)
+            $this->getParameters()
         );
         $this->channel->basic_publish(
             $message,
