@@ -39,9 +39,9 @@ use PhpAmqpLib\Connection\AbstractConnection;
 
 abstract class BaseAmqp
 {
-
-    const NONPERSISTENT = 1;
+    const NON_PERSISTENT = 1;
     const PERSISTENT = 2;
+    
     /**
      * @var AbstractConnection
      */
