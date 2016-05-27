@@ -80,14 +80,12 @@ class RpcClient extends BaseAmqp
         if (empty($requestId)) {
             throw new \InvalidArgumentException("You must provide a request ID");
         }
+        $this->setParameter('correlation_id', $requestId);
+        $this->setParameter('reply_to', $this->queueName);
 
         $message = new AMQPMessage(
             $messageBody,
-            array(
-                'content_type' => 'text/plain',
-                'reply_to' => $this->queueName,
-                'correlation_id' => $requestId
-            )
+            $this->getParameters()
         );
 
         $this->channel
