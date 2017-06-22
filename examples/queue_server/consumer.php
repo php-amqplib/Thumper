@@ -34,7 +34,7 @@ $myConsumer = function ($msg) {
 };
 
 $consumer = new Thumper\Consumer($registry->getConnection());
-$consumer->setExchangeOptions(array('name' => 'hello-exchange', 'type' => 'direct'));
-$consumer->setQueueOptions(array('name' => 'hello-queue'));
+$consumer->setExchangeOptions(array('name' => 'hello', 'type' => 'direct'));
+$consumer->setQueueOptions(array('name' => 'hello'));
 $consumer->setCallback($myConsumer); //myConsumer could be any valid PHP callback
 $consumer->consume(5); //5 is the number of messages to consume

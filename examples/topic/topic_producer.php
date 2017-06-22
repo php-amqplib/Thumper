@@ -30,5 +30,5 @@
 require __DIR__ . '/../../config/config.php';
 
 $producer = new Thumper\Producer($registry->getConnection());
-$producer->setExchangeOptions(array('name' => 'logs-exchange', 'type' => 'topic'));
+$producer->setExchangeOptions(array('name' => 'logs', 'type' => 'topic'));
 $producer->publish($argv[1], sprintf('%s.%s', $argv[2], $argv[3]));

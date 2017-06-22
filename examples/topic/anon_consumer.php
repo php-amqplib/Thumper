@@ -35,7 +35,7 @@ $myConsumer = function ($msg) {
 };
 
 $consumer = new Thumper\AnonConsumer($registry->getConnection());
-$consumer->setExchangeOptions(array('name' => 'logs-exchange', 'type' => 'topic'));
+$consumer->setExchangeOptions(array('name' => 'logs', 'type' => 'topic'));
 $consumer->setRoutingKey($argv[1]);
 $consumer->setCallback($myConsumer);
 $consumer->consume(5);
