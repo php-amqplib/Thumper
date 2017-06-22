@@ -58,7 +58,7 @@ class RpcClientTest extends BaseTest
 
                     return $isContentTypeCorrect && $isCorrelationIdCorrect && $isReplyToCorrect;
                 }),
-                $server . '-exchange',
+                $server,
                 $routingKey
             );
 

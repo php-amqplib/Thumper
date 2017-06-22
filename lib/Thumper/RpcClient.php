@@ -89,7 +89,7 @@ class RpcClient extends BaseAmqp
         );
 
         $this->channel
-            ->basic_publish($message, $server . '-exchange', $routingKey);
+            ->basic_publish($message, $server, $routingKey);
 
         $this->requests++;
     }

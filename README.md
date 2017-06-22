@@ -26,7 +26,7 @@ Each example has a README.md file that shows how to execute it. All the examples
 For example, to publish message to RabbitMQ is as simple as this:
 
 		$producer = new Thumper\Producer($connection);
-		$producer->setExchangeOptions(array('name' => 'hello-exchange', 'type' => 'direct'));
+		$producer->setExchangeOptions(array('name' => 'hello', 'type' => 'direct'));
 		$producer->publish($argv[1]);
 
 And then to consume them on the other side of the wire:
@@ -37,8 +37,8 @@ And then to consume them on the other side of the wire:
 		};
 
 		$consumer = new Thumper\Consumer($connection);
-		$consumer->setExchangeOptions(array('name' => 'hello-exchange', 'type' => 'direct'));
-		$consumer->setQueueOptions(array('name' => 'hello-queue'));
+		$consumer->setExchangeOptions(array('name' => 'hello', 'type' => 'direct'));
+		$consumer->setQueueOptions(array('name' => 'hello'));
 		$consumer->setCallback($myConsumer); //myConsumer could be any valid PHP callback
 		$consumer->consume(5); //5 is the number of messages to consume.
 

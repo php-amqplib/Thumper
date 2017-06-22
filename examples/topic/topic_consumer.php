@@ -35,8 +35,8 @@ $myConsumer = function ($msg) {
 };
 
 $consumer = new Thumper\Consumer($registry->getConnection());
-$consumer->setExchangeOptions(array('name' => 'logs-exchange', 'type' => 'topic'));
-$consumer->setQueueOptions(array('name' => $argv[2] . '-queue'));
+$consumer->setExchangeOptions(array('name' => 'logs', 'type' => 'topic'));
+$consumer->setQueueOptions(array('name' => $argv[2]));
 $consumer->setRoutingKey($argv[1]);
 $consumer->setCallback($myConsumer);
 $consumer->consume(5);
