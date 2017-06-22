@@ -41,7 +41,7 @@ abstract class BaseAmqp
 {
     const NON_PERSISTENT = 1;
     const PERSISTENT = 2;
-    
+
     /**
      * @var AbstractConnection
      */
@@ -106,6 +106,13 @@ abstract class BaseAmqp
     {
         $this->connection = $connection;
         $this->channel = $this->connection->channel();
+    }
+
+    /**
+     * @return AMQPChannel
+     */
+    public function getChannel() {
+        return $this->channel;
     }
 
     /**
