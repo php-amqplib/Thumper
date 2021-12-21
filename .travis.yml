@@ -6,6 +6,7 @@ php:
   - 5.5
   - 5.6
   - 7.0
+  - 8.0
   - hhvm
 
 # RabbitMQ requires setuid flags, so you can only run RabbitMQ on standard, OSX or Trusty infrastructure
